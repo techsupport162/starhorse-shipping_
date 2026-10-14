@@ -105,8 +105,9 @@ function get_db(): PDO
     // If PGOPTIONS is provided, or if connecting to a Neon host without options,
     // attach the endpoint ID so older/Windows libpq clients connect without SNI errors.
     $optionsStr = DB_OPTIONS;
+    // AFTER (Fixes SNI Mismatch)
     if (empty($optionsStr) && strpos(DB_HOST, '.neon.tech') !== false) {
-        $endpoint = preg_replace('/-pooler$/', '', explode('.', DB_HOST)[0]);
+        $endpoint = explode('.', DB_HOST)[0];
         $optionsStr = "endpoint=$endpoint";
     }
     if (!empty($optionsStr)) {
