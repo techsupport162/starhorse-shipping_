@@ -102,11 +102,10 @@ function get_db(): PDO
          . ';sslmode=' . DB_SSLMODE;
 
     // Handle Neon SNI / endpoint routing:
-    // If PGOPTIONS is provided, or if connecting to a Neon host without options,
-    // attach the endpoint ID so older/Windows libpq clients connect without SNI errors.
+    // Only attach options='endpoint=...' if connecting directly (non-pooler) to a Neon host.
+    // Pooler hostnames already contain the full endpoint ID in SNI routing.
     $optionsStr = DB_OPTIONS;
-    // AFTER (Fixes SNI Mismatch)
-    if (empty($optionsStr) && strpos(DB_HOST, '.neon.tech') !== false) {
+    if (empty($optionsStr) && strpos(DB_HOST, '.neon.tech') !== false && strpos(DB_HOST, '-pooler') === false) {
         $endpoint = explode('.', DB_HOST)[0];
         $optionsStr = "endpoint=$endpoint";
     }
