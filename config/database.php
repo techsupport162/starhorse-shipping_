@@ -2,31 +2,53 @@
 /**
  * config/database.php
  * -----------------------------------------------------------------------
- * Single shared PDO connection used by BOTH:
+ * Single shared PDO connection (PostgreSQL) used by BOTH:
  *   - the public website (sections/vessels.php, etc.)
  *   - the admin CMS (starhorse-vessel-admin/)
  *
- * Credential resolution order (first one that sets a value wins):
- *   1. database.local.php  — local XAMPP overrides (git-ignored)
- *   2. Environment variables (DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_PORT)
- *      set in the Render dashboard (or any host's env config)
- *   3. Hard-coded XAMPP defaults below
+ * Credential resolution order (first match wins):
+ *   1. config/database.local.php  — local dev overrides (git-ignored)
+ *   2. .env file in the project root — loaded automatically if present
+ *   3. Process environment variables — set in Render / any host dashboard
+ *
+ * Environment variable names follow the PostgreSQL standard (PG*):
+ *   PGHOST, PGPORT, PGDATABASE, PGUSER, PGPASSWORD, PGSSLMODE
  * -----------------------------------------------------------------------
  */
 
+// 1. Local-dev credentials file (git-ignored; beats everything else)
 if (is_file(__DIR__ . '/database.local.php')) {
     require __DIR__ . '/database.local.php';
 }
 
-// Read from environment variables if not already set by database.local.php.
-// On Render, set DB_HOST / DB_NAME / DB_USER / DB_PASS / DB_PORT
-// in Dashboard → Environment → Environment Variables.
-defined('DB_HOST')    || define('DB_HOST',    getenv('DB_HOST')    ?: '127.0.0.1');
-defined('DB_PORT')    || define('DB_PORT',    getenv('DB_PORT')    ?: '3306');
-defined('DB_NAME')    || define('DB_NAME',    getenv('DB_NAME')    ?: 'starhorse_cms');
-defined('DB_USER')    || define('DB_USER',    getenv('DB_USER')    ?: 'root');
-defined('DB_PASS')    || define('DB_PASS',    getenv('DB_PASS')    ?: '');
-defined('DB_CHARSET') || define('DB_CHARSET', 'utf8mb4');
+// 2. .env file loader — reads KEY='value' lines, skips comments/blanks.
+//    Only needed locally; on Render the host injects env vars directly.
+if (!defined('DB_HOST')) {
+    $envFile = __DIR__ . '/../.env';
+    if (is_file($envFile)) {
+        foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+            $line = trim($line);
+            if ($line === '' || $line[0] === '#' || strpos($line, '=') === false) {
+                continue;
+            }
+            [$key, $val] = explode('=', $line, 2);
+            $key = trim($key);
+            $val = trim($val, " \t'\"");
+            // Only set if not already in the process environment
+            if (getenv($key) === false) {
+                putenv("$key=$val");
+            }
+        }
+    }
+}
+
+// 3. Resolve from environment (set by Render dashboard, or by .env above)
+defined('DB_HOST')    || define('DB_HOST',    getenv('PGHOST')     ?: '127.0.0.1');
+defined('DB_PORT')    || define('DB_PORT',    getenv('PGPORT')     ?: '5432');
+defined('DB_NAME')    || define('DB_NAME',    getenv('PGDATABASE') ?: 'starhorse_cms');
+defined('DB_USER')    || define('DB_USER',    getenv('PGUSER')     ?: 'postgres');
+defined('DB_PASS')    || define('DB_PASS',    getenv('PGPASSWORD') ?: '');
+defined('DB_SSLMODE') || define('DB_SSLMODE', getenv('PGSSLMODE')  ?: 'prefer');
 
 /**
  * Returns a shared PDO instance (created once per request).
@@ -41,7 +63,10 @@ function get_db(): PDO
         return $pdo;
     }
 
-    $dsn = 'mysql:host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;
+    $dsn = 'pgsql:host=' . DB_HOST
+         . ';port='    . DB_PORT
+         . ';dbname='  . DB_NAME
+         . ';sslmode=' . DB_SSLMODE;
 
     $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,

@@ -115,7 +115,8 @@ function create_faq(array $data): int
 
     $stmt = $pdo->prepare(
         'INSERT INTO faqs (question, answer, status, sort_order)
-         VALUES (:question, :answer, :status, :sort_order)'
+         VALUES (:question, :answer, :status, :sort_order)
+         RETURNING id'
     );
     $stmt->execute([
         ':question'   => $data['question'],
@@ -124,7 +125,7 @@ function create_faq(array $data): int
         ':sort_order' => $data['sort_order'] ?? $nextSortOrder,
     ]);
 
-    return (int) $pdo->lastInsertId();
+    return (int) $stmt->fetchColumn();
 }
 
 /** Update an existing FAQ's fields. */

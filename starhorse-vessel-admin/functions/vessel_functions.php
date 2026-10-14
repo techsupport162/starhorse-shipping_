@@ -86,7 +86,7 @@ function get_vessels_for_admin(string $search = '', int $limit = 10, int $offset
     $where  = '';
     $params = [];
     if ($search !== '') {
-        $where = 'WHERE v.name LIKE :search';
+        $where = 'WHERE v.name ILIKE :search';
         $params[':search'] = '%' . $search . '%';
     }
 
@@ -147,7 +147,8 @@ function create_vessel(array $data): int
 
     $stmt = $pdo->prepare(
         'INSERT INTO vessels (name, tagline, length_m, breadth_m, depth_m, gross_tonnage, description, status)
-         VALUES (:name, :tagline, :length_m, :breadth_m, :depth_m, :gross_tonnage, :description, :status)'
+         VALUES (:name, :tagline, :length_m, :breadth_m, :depth_m, :gross_tonnage, :description, :status)
+         RETURNING id'
     );
     $stmt->execute([
         ':name'          => $data['name'],
@@ -160,7 +161,7 @@ function create_vessel(array $data): int
         ':status'        => $data['status'] ?? 'published',
     ]);
 
-    return (int) $pdo->lastInsertId();
+    return (int) $stmt->fetchColumn();
 }
 
 /** Update an existing vessel's core fields. */
@@ -227,10 +228,10 @@ function add_vessel_image(int $vesselId, string $filename, int $sortOrder = 0): 
 {
     $pdo = get_db();
     $stmt = $pdo->prepare(
-        'INSERT INTO vessel_images (vessel_id, image, sort_order) VALUES (:vessel_id, :image, :sort_order)'
+        'INSERT INTO vessel_images (vessel_id, image, sort_order) VALUES (:vessel_id, :image, :sort_order) RETURNING id'
     );
     $stmt->execute([':vessel_id' => $vesselId, ':image' => $filename, ':sort_order' => $sortOrder]);
-    return (int) $pdo->lastInsertId();
+    return (int) $stmt->fetchColumn();
 }
 
 /** Delete a single gallery image (DB row + file on disk). Returns false if not found. */
@@ -376,11 +377,11 @@ function create_feature(string $name, string $icon): int
     $maxOrder = (int) $pdo->query('SELECT COALESCE(MAX(sort_order), 0) FROM vessel_features')->fetchColumn();
 
     $stmt = $pdo->prepare(
-        'INSERT INTO vessel_features (name, icon, sort_order) VALUES (:name, :icon, :sort_order)'
+        'INSERT INTO vessel_features (name, icon, sort_order) VALUES (:name, :icon, :sort_order) RETURNING id'
     );
     $stmt->execute([':name' => $name, ':icon' => $icon, ':sort_order' => $maxOrder + 10]);
 
-    return (int) $pdo->lastInsertId();
+    return (int) $stmt->fetchColumn();
 }
 
 /** Update an existing feature's name/icon. */
@@ -430,7 +431,7 @@ function set_vessel_features(int $vesselId, array $featureIds): void
     }
 
     $insert = $pdo->prepare(
-        'INSERT IGNORE INTO vessel_feature_assignments (vessel_id, feature_id, sort_order) VALUES (:vessel_id, :feature_id, :sort_order)'
+        'INSERT INTO vessel_feature_assignments (vessel_id, feature_id, sort_order) VALUES (:vessel_id, :feature_id, :sort_order) ON CONFLICT DO NOTHING'
     );
     $position = 0;
     foreach (array_unique(array_map('intval', $featureIds)) as $featureId) {

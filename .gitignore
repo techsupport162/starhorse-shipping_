@@ -1,0 +1,13 @@
+# ---- Credentials & local overrides ----
+.env
+config/database.local.php
+
+# ---- Dev tools ----
+.vscode/
+fiveserver.config.js
+
+# ---- Build artifacts / OS ----
+*.zip
+*.tar.gz
+Thumbs.db
+.DS_Store

@@ -34,7 +34,7 @@ function login_throttle_username(string $username): string
 
 /**
  * Seconds until this username/IP may try again, or 0 if not blocked.
- * All time maths happens in MySQL (NOW()) so a PHP/MySQL timezone
+ * All time maths happens in the database (NOW()) so a PHP/DB timezone
  * mismatch on the host can't skew the lockout.
  */
 function login_throttle_seconds_remaining(string $username): int
@@ -66,12 +66,18 @@ function login_throttle_seconds_remaining(string $username): int
  */
 function login_throttle_window_stats(string $where, array $params): array
 {
+    // PostgreSQL date arithmetic:
+    //   TIMESTAMPDIFF(SECOND, NOW(), expr)  → EXTRACT(EPOCH FROM (expr - NOW()))
+    //   INTERVAL :param SECOND              → (:param * INTERVAL '1 second')
     $stmt = get_db()->prepare(
         "SELECT COUNT(*) AS n,
-                COALESCE(TIMESTAMPDIFF(SECOND, NOW(), MIN(attempted_at) + INTERVAL :w1 SECOND), 0) AS remaining
+                COALESCE(
+                    EXTRACT(EPOCH FROM (MIN(attempted_at) + (:w1 * INTERVAL '1 second') - NOW()))::int,
+                    0
+                ) AS remaining
          FROM login_attempts
          WHERE $where
-           AND attempted_at > NOW() - INTERVAL :w2 SECOND"
+           AND attempted_at > NOW() - (:w2 * INTERVAL '1 second')"
     );
     foreach ($params as $key => $value) {
         $stmt->bindValue($key, $value);
@@ -92,7 +98,7 @@ function login_throttle_record_failure(string $username): void
     $stmt = $pdo->prepare('INSERT INTO login_attempts (username, ip_address) VALUES (:u, :ip)');
     $stmt->execute([':u' => login_throttle_username($username), ':ip' => login_client_ip()]);
 
-    $pdo->exec('DELETE FROM login_attempts WHERE attempted_at < NOW() - INTERVAL 1 DAY');
+    $pdo->exec("DELETE FROM login_attempts WHERE attempted_at < NOW() - INTERVAL '1 day'");
 }
 
 /** Successful sign-in: forget this username/IP's failures so typos earlier don't count against them later. */
