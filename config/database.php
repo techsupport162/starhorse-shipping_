@@ -101,17 +101,31 @@ function get_db(): PDO
          . ';dbname='  . DB_NAME
          . ';sslmode=' . DB_SSLMODE;
 
-    // Handle Neon SNI / endpoint routing:
-    // Only attach options='endpoint=...' if connecting directly (non-pooler) to a Neon host.
-    // Pooler hostnames already contain the full endpoint ID in SNI routing.
+    // Handle Neon SNI / endpoint routing.
+    // - Pooler hosts already carry the full endpoint ID in the SNI → never send options=endpoint=...
+    // - Direct (non-pooler) Neon hosts may need the endpoint option for older clients that lack SNI.
     $optionsStr = DB_OPTIONS;
-    if (empty($optionsStr) && strpos(DB_HOST, '.neon.tech') !== false && strpos(DB_HOST, '-pooler') === false) {
-        $endpoint = explode('.', DB_HOST)[0];
+    $isNeon     = strpos(DB_HOST, '.neon.tech') !== false;
+    $isPooler   = strpos(DB_HOST, '-pooler') !== false;
+
+    if ($isNeon && $isPooler) {
+        // Strip any endpoint=... that may have come from DATABASE_URL / PGOPTIONS
+        $optionsStr = '';
+    } elseif (empty($optionsStr) && $isNeon && !$isPooler) {
+        // Auto-add for direct connections when not already present
+        $endpoint   = explode('.', DB_HOST)[0];
         $optionsStr = "endpoint=$endpoint";
     }
+
     if (!empty($optionsStr)) {
         $trimmed = trim($optionsStr, "'\"");
-        $dsn .= ";options='$trimmed'";
+        // Only keep non-endpoint options if you ever need them; otherwise just skip entirely for pooler
+        if (stripos($trimmed, 'endpoint=') === false) {
+            $dsn .= ";options='$trimmed'";
+        } else {
+            // safety: still strip endpoint even if the earlier guard missed it
+            // (leave empty for pooler)
+        }
     }
 
     $options = [
