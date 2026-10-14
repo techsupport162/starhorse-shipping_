@@ -53,8 +53,8 @@ function sh_send_page_csp(): void
         "script-src 'self' https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/ 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw='",
         "style-src 'self' https://fonts.googleapis.com https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/ https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/",
         "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/ https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/",
-        "img-src 'self' data:",
-        "media-src 'self'",
+        "img-src 'self' data: https://res.cloudinary.com",
+        "media-src 'self' https://res.cloudinary.com",
         // Google Maps embed in sections/contact.php
         "frame-src https://www.google.com https://maps.google.com",
         // Career form submission (ajax/career_apply.php)

@@ -11,3 +11,6 @@ fiveserver.config.js
 *.tar.gz
 Thumbs.db
 .DS_Store
+
+# ---- Heavy media (hosted on Cloudinary CDN) ----
+assets/vid/*.mp4

@@ -4,3 +4,4 @@
 *.zip
 config/database.local.php
 fiveserver.config.js
+assets/vid/*.mp4

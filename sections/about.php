@@ -1,9 +1,29 @@
 <?php
 // sections/about.php - About section
 
+require_once __DIR__ . '/../config/database.php';
+
 // Years of service, counted from the founding date (Sept 25, 2008)
 $ph_tz = new DateTimeZone('Asia/Manila');
 $years_of_service = (new DateTime('2008-09-25', $ph_tz))->diff(new DateTime('now', $ph_tz))->y;
+
+// Cloudinary video configuration (read from .env / process environment)
+$about_video_url = 'assets/vid/0508.mp4';
+$cld_url = getenv('CLOUDINARY_URL') ?: '';
+$cld_cloud_name = getenv('CLOUDINARY_CLOUD_NAME') ?: '';
+
+if (!$cld_cloud_name && $cld_url) {
+    $parsed_host = parse_url($cld_url, PHP_URL_HOST);
+    if ($parsed_host) {
+        $cld_cloud_name = $parsed_host;
+    }
+}
+
+if (!empty(getenv('CLOUDINARY_VIDEO_URL'))) {
+    $about_video_url = getenv('CLOUDINARY_VIDEO_URL');
+} elseif ($cld_cloud_name) {
+    $about_video_url = 'https://res.cloudinary.com/' . rawurlencode($cld_cloud_name) . '/video/upload/0508.mp4';
+}
 ?>
 <section class="page-section about-section" id="about">
 
@@ -128,7 +148,7 @@ $years_of_service = (new DateTime('2008-09-25', $ph_tz))->diff(new DateTime('now
                     <div class="col-lg-6">
                         <div class="about-video-wrap">
                             <video controls preload="none" playsinline poster="assets/img/about/video-poster-fleet.jpg">
-                                <source src="assets/video/starhorse-voyage-tour.mp4" type="video/mp4" />
+                                <source src="<?= htmlspecialchars($about_video_url, ENT_QUOTES, 'UTF-8') ?>" type="video/mp4" />
                                 Your browser does not support the video tag.
                             </video>
                         </div>
