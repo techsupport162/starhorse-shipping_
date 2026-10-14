@@ -126,7 +126,8 @@ function get_db(): PDO
         // Never leak credentials or raw exception details to the browser.
         error_log('[Starhorse DB] Connection failed: ' . $e->getMessage());
         http_response_code(500);
-        die('A database connection error occurred. Please try again later.');
+       // TEMPORARY DEBUG: Print the raw PDO exception directly to screen
+        die('Database Connection Error: ' . $e->getMessage() . ' | DSN: ' . $dsn);
     }
 
     return $pdo;
