@@ -8,21 +8,17 @@ $ph_tz = new DateTimeZone('Asia/Manila');
 $years_of_service = (new DateTime('2008-09-25', $ph_tz))->diff(new DateTime('now', $ph_tz))->y;
 
 // Cloudinary video configuration (read from .env / process environment)
-$about_video_url = 'assets/vid/0508.mp4';
-$cld_url = getenv('CLOUDINARY_URL') ?: '';
 $cld_cloud_name = getenv('CLOUDINARY_CLOUD_NAME') ?: '';
-
+$cld_url = getenv('CLOUDINARY_URL') ?: '';
 if (!$cld_cloud_name && $cld_url) {
-    $parsed_host = parse_url($cld_url, PHP_URL_HOST);
-    if ($parsed_host) {
-        $cld_cloud_name = $parsed_host;
-    }
+    $cld_cloud_name = parse_url($cld_url, PHP_URL_HOST) ?: '';
 }
+$cld_cloud_name = $cld_cloud_name ?: 'trda3kbd';
+$cld_public_id  = getenv('CLOUDINARY_VIDEO_PUBLIC_ID') ?: '0508';
 
-if (!empty(getenv('CLOUDINARY_VIDEO_URL'))) {
-    $about_video_url = getenv('CLOUDINARY_VIDEO_URL');
-} elseif ($cld_cloud_name) {
-    $about_video_url = 'https://res.cloudinary.com/' . rawurlencode($cld_cloud_name) . '/video/upload/0508.mp4';
+$about_embed_url = 'https://player.cloudinary.com/embed/?cloud_name=' . rawurlencode($cld_cloud_name) . '&public_id=' . rawurlencode($cld_public_id);
+if (!empty(getenv('CLOUDINARY_EMBED_URL'))) {
+    $about_embed_url = getenv('CLOUDINARY_EMBED_URL');
 }
 ?>
 <section class="page-section about-section" id="about">
@@ -147,10 +143,16 @@ if (!empty(getenv('CLOUDINARY_VIDEO_URL'))) {
                     </div>
                     <div class="col-lg-6">
                         <div class="about-video-wrap">
-                            <video controls preload="none" playsinline poster="assets/img/about/video-poster-fleet.jpg">
-                                <source src="<?= htmlspecialchars($about_video_url, ENT_QUOTES, 'UTF-8') ?>" type="video/mp4" />
-                                Your browser does not support the video tag.
-                            </video>
+                            <iframe
+                                src="<?= htmlspecialchars($about_embed_url, ENT_QUOTES, 'UTF-8') ?>"
+                                width="640"
+                                height="360" 
+                                style="height: auto; width: 100%; aspect-ratio: 640 / 360; border: 0;"
+                                allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+                                allowfullscreen
+                                frameborder="0"
+                                title="Starhorse Fleet Video">
+                            </iframe>
                         </div>
                         <p class="about-video-caption">
                             Suggested clip: a short (60–90 sec) walkthrough of a vessel

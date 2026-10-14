@@ -55,8 +55,8 @@ function sh_send_page_csp(): void
         "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/ https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/",
         "img-src 'self' data: https://res.cloudinary.com",
         "media-src 'self' https://res.cloudinary.com",
-        // Google Maps embed in sections/contact.php
-        "frame-src https://www.google.com https://maps.google.com",
+        // Google Maps embed in sections/contact.php, Cloudinary player in sections/about.php
+        "frame-src https://www.google.com https://maps.google.com https://player.cloudinary.com",
         // Career form submission (ajax/career_apply.php)
         "connect-src 'self'",
         "object-src 'none'",
