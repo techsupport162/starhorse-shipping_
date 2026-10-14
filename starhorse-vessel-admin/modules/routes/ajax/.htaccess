@@ -1,0 +1,20 @@
+# -----------------------------------------------------------------------
+# modules/routes/ajax/ — upload size override
+# -----------------------------------------------------------------------
+# functions/helpers.php validates the banner at up to 10MB and destination
+# images at up to 5MB, but PHP itself rejects an oversized upload before
+# a script ever runs if upload_max_filesize/post_max_size are lower than
+# that (a very common stock default is 2M/8M). Without this, uploads
+# between the server's default and our application limit would fail with
+# no useful error — the file would simply be missing from $_FILES.
+#
+# post_max_size must be larger than upload_max_filesize: the POST body
+# also carries the CSRF token and other form fields alongside the file.
+#
+# Wrapped in <IfModule mod_php.c> so this is silently ignored (rather
+# than causing a 500) on a PHP-FPM setup, where .user.ini in this same
+# directory provides the equivalent override instead.
+<IfModule mod_php.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+</IfModule>

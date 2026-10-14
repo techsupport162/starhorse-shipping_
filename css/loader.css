@@ -1,0 +1,305 @@
+/* =========================================================================
+   Starhorse Shipping Line, Inc. — Maritime Loader
+   -------------------------------------------------------------------------
+   A minimalist "ship on the ocean" loading animation.
+   Pure CSS3 animation, SVG artwork, zero external dependencies.
+
+   OPTIONAL COMPONENT — not loaded by the landing page. Pair with
+   js/loader.js (and the loader markup partial) when a page needs it:
+     <link href="css/loader.css" rel="stylesheet">   (after css/site.css)
+   Colour tokens (--sh-navy-deep, --sh-navy, --sh-teal, --sh-foam,
+   --sh-gold) come from the :root block in css/site.css.
+   ========================================================================= */
+
+:root {
+  /* Sizing scale — clamp() keeps the loader proportional at every viewport */
+  --sh-loader-size: clamp(96px, 12vw, 176px);
+  --sh-loader-size-inline: clamp(64px, 8vw, 112px);
+}
+
+/* -------------------------------------------------------------------------
+   Container: inline mode
+   Drop <div class="sh-loader" data-sh-loader> inside any card, section, or
+   table cell. It centers itself and scales to --sh-loader-size-inline.
+   ------------------------------------------------------------------------- */
+.sh-loader {
+  --loader-scale: var(--sh-loader-size-inline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: clamp(0.75rem, 3vw, 1.5rem) 0;
+}
+
+.sh-loader__stage {
+  position: relative;
+  width: var(--loader-scale);
+  height: calc(var(--loader-scale) * 0.62);
+  overflow: hidden;
+  border-radius: clamp(6px, 1vw, 10px);
+}
+
+/* -------------------------------------------------------------------------
+   Container: full-page mode
+   Add data-sh-mode="full" (set automatically by showLoader({mode:'full'}))
+   Covers the viewport with a translucent, blurred backdrop. The ship
+   remains the sole visual focus — no accompanying text or bars.
+   ------------------------------------------------------------------------- */
+.sh-loader[data-sh-mode="full"] {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  padding: 0;
+  background: radial-gradient(
+    120% 120% at 50% 30%,
+    rgba(18, 58, 92, 0.55) 0%,
+    rgba(6, 18, 31, 0.86) 70%
+  );
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.35s ease,
+    visibility 0.35s ease;
+}
+
+.sh-loader[data-sh-mode="full"].is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sh-loader[data-sh-mode="full"] .sh-loader__stage {
+  --loader-scale: var(--sh-loader-size);
+  width: var(--loader-scale);
+  height: calc(var(--loader-scale) * 0.62);
+  border-radius: clamp(10px, 1.4vw, 16px);
+  box-shadow: 0 18px 60px -14px rgba(0, 0, 0, 0.65);
+}
+
+/* Inline mode visibility toggle (kept in DOM, hidden until activated) */
+.sh-loader[data-sh-mode="inline"] {
+  display: none;
+}
+.sh-loader[data-sh-mode="inline"].is-active {
+  display: flex;
+}
+
+/* -------------------------------------------------------------------------
+   Scene background — soft sky-to-sea gradient inside the stage
+   ------------------------------------------------------------------------- */
+.sh-loader__sea {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--sh-navy) 0%,
+    var(--sh-teal) 46%,
+    var(--sh-navy-deep) 100%
+  );
+}
+
+/* -------------------------------------------------------------------------
+   SVG scene
+   ------------------------------------------------------------------------- */
+.sh-loader__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  shape-rendering: geometricPrecision;
+}
+
+/* Distant horizon glow */
+.sh-loader__horizon {
+  fill: rgba(234, 244, 247, 0.08);
+}
+
+/* Wave layers — each is a duplicated (2x width) wave path that slides
+   exactly one tile-width to the left, then resets, for a seamless loop. */
+.sh-loader__wave {
+  fill: var(--sh-foam);
+  transform-box: fill-box;
+  will-change: transform;
+}
+
+.sh-loader__wave--back {
+  fill-opacity: 0.16;
+  animation: sh-wave-scroll 7.5s linear infinite;
+}
+
+.sh-loader__wave--mid {
+  fill-opacity: 0.28;
+  animation: sh-wave-scroll 5.2s linear infinite;
+}
+
+.sh-loader__wave--front {
+  fill-opacity: 0.95;
+  fill: var(--sh-navy-deep);
+  animation: sh-wave-scroll 3.6s linear infinite;
+}
+
+@keyframes sh-wave-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* -------------------------------------------------------------------------
+   The vessel
+   Grouped so a single transform animates hull + cabin + funnel together —
+   a gentle bob (translateY) composited with a subtle roll (rotate).
+   ------------------------------------------------------------------------- */
+.sh-loader__ship {
+  transform-box: fill-box;
+  transform-origin: 50% 85%;
+  animation: sh-ship-bob 3.2s ease-in-out infinite;
+}
+
+.sh-loader__hull {
+  fill: var(--sh-foam);
+}
+
+.sh-loader__hull-trim {
+  fill: var(--sh-gold);
+}
+
+.sh-loader__cabin {
+  fill: var(--sh-foam);
+}
+
+.sh-loader__cabin-window {
+  fill: var(--sh-navy-deep);
+}
+
+.sh-loader__funnel {
+  fill: var(--sh-navy-deep);
+}
+
+.sh-loader__funnel-band {
+  fill: var(--sh-gold);
+}
+
+.sh-loader__mast {
+  stroke: var(--sh-foam);
+  stroke-width: 1.2;
+}
+
+.sh-loader__pennant {
+  fill: var(--sh-gold);
+  animation: sh-pennant-flutter 1.8s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: 0% 50%;
+}
+
+@keyframes sh-ship-bob {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-3.2%) rotate(-1.1deg);
+  }
+  50% {
+    transform: translateY(0.4%) rotate(0.2deg);
+  }
+  75% {
+    transform: translateY(-1.6%) rotate(1.1deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes sh-pennant-flutter {
+  0%,
+  100% {
+    transform: scaleX(1) skewY(0deg);
+  }
+  50% {
+    transform: scaleX(0.85) skewY(6deg);
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Wake ripples trailing the hull — minimal, elegant, low-opacity ellipses
+   that expand and fade, restarting in a staggered loop.
+   ------------------------------------------------------------------------- */
+.sh-loader__ripple {
+  fill: none;
+  stroke: var(--sh-foam);
+  stroke-width: 1;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: sh-ripple 3.2s ease-out infinite;
+}
+
+.sh-loader__ripple--r2 {
+  animation-delay: 1.0667s;
+}
+.sh-loader__ripple--r3 {
+  animation-delay: 2.1333s;
+}
+
+@keyframes sh-ripple {
+  0% {
+    opacity: 0;
+    transform: scale(0.35) translateY(0);
+  }
+  12% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5) translateY(2%);
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Accessibility: visually-hidden status text for screen readers only.
+   No visible loading text per design spec — the scene communicates state.
+   ------------------------------------------------------------------------- */
+.sh-loader__sr-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* -------------------------------------------------------------------------
+   Reduced motion: stop drift/bob/flutter, keep a faint static scene so the
+   loader still reads as "in progress" without motion.
+   ------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .sh-loader__wave--back,
+  .sh-loader__wave--mid,
+  .sh-loader__wave--front,
+  .sh-loader__ship,
+  .sh-loader__pennant,
+  .sh-loader__ripple {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .sh-loader__ripple {
+    opacity: 0.18;
+    transform: scale(1);
+  }
+}
+
+/* -------------------------------------------------------------------------
+   High-DPI polish — crisper hairlines on retina displays
+   ------------------------------------------------------------------------- */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .sh-loader__mast {
+    stroke-width: 1;
+  }
+}

@@ -1,0 +1,3231 @@
+/* =============================================================================
+   Starhorse Shipping Line, Inc. — site styles
+   -----------------------------------------------------------------------------
+   Loaded after css/styles.css (the compiled Bootstrap 5.2.3 / Creative theme
+   bundle, which should be treated as vendor code and not edited by hand).
+   Everything specific to this site lives here.
+
+   Contents
+     1.  CSS variables
+     2.  Base
+     3.  Global utilities / shared components
+     4.  Header / navigation
+     5.  Hero (masthead)
+     6.  About
+     7.  Vessels carousel
+     8.  Routes (banner, port logo marquee)
+     9.  Rates (fare finder)
+     10. FAQs
+     11. Career
+     12. Contact
+     13. Footer
+     14. Animations (keyframes, scroll reveal, reduced motion)
+   ============================================================================= */
+
+
+/* =============================================================================
+   1. CSS VARIABLES
+   ============================================================================= */
+:root {
+    /* Maritime palette */
+    --sh-navy-deep: #0a2540;
+    --sh-navy: #123a5c;
+    --sh-teal: #1c6e8c;
+    --sh-foam: #eaf4f7;
+    --sh-gold: #c9a24b;
+
+    /* Brand reds (--bs-primary is the brand red: #c82020) */
+    --sh-red: var(--bs-primary);
+    --sh-red-hover: var(--bs-link-hover-color);
+    --sh-red-deep: #8f1717;
+    --sh-burgundy: #5c1420;
+
+    /* Typography */
+    --sh-font-heading: "Merriweather Sans", sans-serif;
+
+    /* Radii */
+    --sh-radius-card: 1rem;
+
+    /* Elevation */
+    --sh-shadow-card: 0 1rem 2rem -1.25rem rgba(10, 37, 64, 0.28);
+    --sh-shadow-card-hover: 0 1.5rem 2.75rem -1.5rem rgba(10, 37, 64, 0.38);
+
+    /* Focus ring */
+    --sh-focus-ring: 2px solid var(--bs-primary);
+}
+
+
+/* =============================================================================
+   2. BASE
+   ============================================================================= */
+html {
+    height: 100%;
+    scroll-padding-top: calc(4.5rem - 1px);
+}
+
+body {
+    width: 100%;
+    height: 100%;
+}
+
+.page-section {
+    padding: 8rem 0;
+}
+
+hr.divider {
+    height: 0.2rem;
+    max-width: 3.25rem;
+    margin: 1.5rem auto;
+    background-color: var(--bs-primary);
+    opacity: 1;
+}
+
+/* Native <input> placeholders previously inherited this tone from a CDN
+   reset; set explicitly so it no longer depends on that stylesheet. */
+input::placeholder,
+textarea::placeholder {
+    color: #9ca3af;
+}
+
+
+/* =============================================================================
+   3. GLOBAL UTILITIES / SHARED COMPONENTS
+   ============================================================================= */
+.btn-xl {
+    padding: 1.25rem 2.25rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 10rem;
+}
+
+/* Skip link — hidden until focused (uses Bootstrap's
+   .visually-hidden-focusable for the hide/show behaviour). */
+.skip-link:focus {
+    position: fixed !important;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 1080;
+    padding: 0.6rem 1.1rem;
+    background: #fff;
+    color: var(--bs-primary);
+    font-family: var(--sh-font-heading);
+    font-weight: 700;
+    border-radius: var(--bs-border-radius);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+}
+
+/* Shared "empty state" panel (Career + Contact) */
+.sh-empty-state {
+    max-width: 480px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    background: linear-gradient(135deg, var(--sh-foam) 0%, #fff 100%);
+    border: 1px dashed var(--bs-border-color);
+    border-radius: var(--bs-border-radius-lg);
+    color: var(--bs-gray-600);
+}
+
+.sh-empty-state i {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: 2.25rem;
+    color: var(--sh-teal);
+    opacity: 0.6;
+}
+
+/* Shared keyboard focus ring for custom (non-Bootstrap) controls */
+.sh-vc-thumb:focus-visible,
+.sh-vc-dot:focus-visible,
+.sh-career-resume-drop:focus-visible,
+.sh-contact-row:focus-visible,
+.sh-port-card:focus-visible,
+.btn-sh-directions:focus-visible {
+    outline: var(--sh-focus-ring);
+    outline-offset: 2px;
+}
+
+
+/* =============================================================================
+   4. HEADER / NAVIGATION
+   Collapses to the hamburger menu below 1200px (navbar-expand-xl). The
+   centred-logo desktop layout needs ~1200px to fit all nine links plus the
+   Book Now button; at 992–1199px it previously pushed Book Now off-screen.
+   ============================================================================= */
+#mainNav {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    background-color: #fff;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transition: background-color 0.2s ease;
+}
+
+#mainNav .nav-logo {
+    display: block;
+    width: auto;
+    height: 90px;
+    transition: height 0.2s ease;
+}
+
+#mainNav .navbar-nav .nav-item .nav-link {
+    padding: 0.75rem 0;
+    font-family: var(--bs-font-sans-serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--bs-gray-600);
+}
+
+#mainNav .navbar-nav .nav-item .nav-link:hover,
+#mainNav .navbar-nav .nav-item .nav-link:active {
+    color: var(--bs-primary);
+}
+
+/* Book Now CTA */
+#mainNav .navbar-nav .nav-item .nav-link.book-now-link {
+    display: flex;
+    align-items: center;
+}
+
+#mainNav .book-now-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1.25rem;
+    font-family: var(--sh-font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: #fff;
+    background-color: var(--bs-primary);
+    border-radius: 50rem;
+    box-shadow: 0 2px 6px rgba(var(--bs-primary-rgb), 0.35);
+    transition: background-color 0.2s ease-in-out, transform 0.15s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+#mainNav .book-now-link:hover .book-now-btn,
+#mainNav .book-now-link:focus-visible .book-now-btn {
+    background-color: var(--sh-red-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(var(--bs-primary-rgb), 0.45);
+}
+
+/* Collapsed (hamburger) menu */
+@media (max-width: 1199.98px) {
+    #mainNav .navbar-nav .nav-item .nav-link.book-now-link {
+        justify-content: flex-start;
+        padding-top: 0.5rem;
+        padding-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    #mainNav .nav-logo {
+        height: 65px;
+    }
+}
+
+/* Expanded desktop bar: logo centred between two link groups, transparent
+   over the hero until the page scrolls (.navbar-shrink, set by JS). */
+@media (min-width: 1200px) {
+    #mainNav {
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    #mainNav .container {
+        padding-right: 1.5rem;
+        padding-left: 1.5rem;
+    }
+
+    #mainNav .nav-logo {
+        height: 120px;
+    }
+
+    #mainNav .navbar-nav-wrapper {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    #mainNav .nav-left,
+    #mainNav .nav-right {
+        flex: 1 1 0;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    #mainNav .nav-left {
+        justify-content: flex-end;
+    }
+
+    #mainNav .nav-right {
+        justify-content: flex-start;
+    }
+
+    #mainNav .navbar-brand-center {
+        flex-shrink: 0;
+        align-items: center;
+        margin: 0 1.5rem;
+        padding: 0.5rem 0;
+    }
+
+    #mainNav .navbar-nav .nav-item .nav-link {
+        padding: 0 0.6rem;
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    #mainNav .navbar-nav .nav-item .nav-link:hover {
+        color: #fff;
+    }
+
+    #mainNav .navbar-nav .nav-item .nav-link.book-now-link {
+        margin-left: 0.6rem;
+        padding: 0;
+    }
+
+    #mainNav .book-now-btn {
+        padding: 0.5rem 1.1rem;
+        font-size: 0.9rem;
+    }
+
+    #mainNav.navbar-shrink {
+        background-color: #fff;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    #mainNav.navbar-shrink .navbar-nav .nav-item .nav-link {
+        color: var(--bs-gray-900);
+    }
+
+    #mainNav.navbar-shrink .navbar-nav .nav-item .nav-link:hover {
+        color: var(--bs-primary);
+    }
+}
+
+@media (min-width: 1400px) {
+    #mainNav .container {
+        padding-right: 3rem;
+        padding-left: 3rem;
+    }
+
+    #mainNav .nav-logo {
+        height: 150px;
+    }
+
+    #mainNav .navbar-brand-center {
+        margin: 0 2rem;
+    }
+
+    #mainNav .navbar-nav .nav-item .nav-link {
+        padding: 0 0.85rem;
+        font-size: 1.15rem;
+    }
+
+    #mainNav .navbar-nav .nav-item .nav-link.book-now-link {
+        margin-left: 0.85rem;
+    }
+
+    #mainNav .book-now-btn {
+        padding: 0.5rem 1.25rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* Declared after the breakpoint blocks so it wins over .navbar-shrink
+   without needing !important. */
+#mainNav .navbar-nav .nav-item .nav-link.active {
+    color: var(--bs-primary);
+}
+
+
+/* =============================================================================
+   5. HERO (MASTHEAD)
+   ============================================================================= */
+header.masthead {
+    position: relative;
+    overflow: hidden;
+    padding-top: 10rem;
+    padding-bottom: calc(10rem - 4.5rem);
+}
+
+header.masthead .video-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Warm tint over the video so the white headline stays legible */
+header.masthead::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: rgba(92, 77, 66, 0.4);
+    pointer-events: none;
+}
+
+header.masthead .container {
+    position: relative;
+    z-index: 2;
+}
+
+header.masthead h1 {
+    font-size: 2.25rem;
+}
+
+@media (min-width: 992px) {
+    header.masthead {
+        height: 100vh;
+        min-height: 40rem;
+        padding-top: 4.5rem;
+        padding-bottom: 0;
+    }
+
+    header.masthead h1 {
+        font-size: 3rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    header.masthead h1 {
+        font-size: 3.5rem;
+    }
+}
+
+
+/* =============================================================================
+   6. ABOUT
+   ============================================================================= */
+.about-section {
+    --sh-red-tint: #fdf1f1;
+    --sh-red-tint-border: #f3d9d9;
+    --sh-ink: #1c1c1c;
+    --sh-muted: #6c757d;
+    --sh-line: #eadada;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    background: #fff;
+}
+
+.about-inner {
+    padding: 6rem 0 5rem;
+}
+
+/* Wavy top / bottom dividers — filled with the page background colour */
+.about-wave {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    line-height: 0;
+}
+
+.about-wave svg {
+    display: block;
+    width: 100%;
+    height: 90px;
+}
+
+.about-wave path {
+    fill: var(--bs-body-bg);
+}
+
+/* Decorative diagonal ribbons (echo the brand mark) */
+.about-section .ribbon-tl,
+.about-section .ribbon-br {
+    position: absolute;
+    z-index: 0;
+    width: 260px;
+    height: 260px;
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+.about-section .ribbon-tl {
+    top: -60px;
+    left: -90px;
+    background: linear-gradient(135deg, var(--sh-red) 0%, var(--sh-red-deep) 100%);
+    clip-path: polygon(0 0, 60% 0, 0 60%);
+}
+
+.about-section .ribbon-br {
+    right: -90px;
+    bottom: -70px;
+    background: linear-gradient(315deg, var(--sh-red) 0%, var(--sh-red-deep) 100%);
+    clip-path: polygon(100% 100%, 40% 100%, 100% 40%);
+}
+
+/* Eyebrow label */
+.about-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    font-family: var(--sh-font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sh-red);
+    background: var(--sh-red-tint);
+    border: 1px solid var(--sh-red-tint-border);
+    border-radius: 50rem;
+}
+
+.about-eyebrow::before {
+    content: "\2693"; /* anchor */
+    font-size: 0.9rem;
+}
+
+.about-intro h2 {
+    margin-top: 1rem;
+    font-weight: 700;
+    color: var(--sh-ink);
+}
+
+.about-intro p {
+    max-width: 760px;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 1.08rem;
+    color: var(--sh-muted);
+}
+
+/* Stat strip */
+.about-stats {
+    margin-top: 3rem;
+    overflow: hidden;
+    background: linear-gradient(120deg, var(--sh-red) 0%, var(--sh-red-deep) 100%);
+    border-radius: var(--sh-radius-card);
+    box-shadow: 0 1.25rem 2.5rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.about-stat {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: #fff;
+    border-right: 1px solid rgba(255, 255, 255, 0.18);
+    transition: background 0.3s ease;
+}
+
+.about-stat:last-child {
+    border-right: none;
+}
+
+.about-stat:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.about-stat-icon {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: 2.5rem;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.9);
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.about-stat:hover .about-stat-icon {
+    color: #fff;
+    transform: scale(1.15) translateY(-3px);
+}
+
+.about-stat .num {
+    display: block;
+    font-family: var(--sh-font-heading);
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.about-stat .lbl {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* Content blocks */
+.about-block {
+    position: relative;
+    z-index: 1;
+    margin-top: 6rem;
+}
+
+.about-block-head {
+    margin-bottom: 2.75rem;
+    text-align: center;
+}
+
+.about-block-head h3 {
+    font-weight: 700;
+    color: var(--sh-ink);
+}
+
+.about-block-head p {
+    max-width: 680px;
+    margin: 0.5rem auto 0;
+    color: var(--sh-muted);
+}
+
+.about-block-head .about-eyebrow {
+    margin-bottom: 0.25rem;
+}
+
+/* Mission / Vision / Coverage cards */
+.about-mvp-card {
+    height: 100%;
+    padding: 2.25rem 1.75rem;
+    background: #fff;
+    border: 1px solid var(--sh-line);
+    border-radius: var(--sh-radius-card);
+    box-shadow: 0 0.75rem 2rem rgba(28, 20, 20, 0.05);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.about-mvp-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 1.5rem 2.75rem rgba(var(--bs-primary-rgb), 0.16);
+}
+
+.about-mvp-card .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 1.25rem;
+    color: var(--sh-red);
+    background: var(--sh-red-tint);
+    border-radius: 0.85rem;
+}
+
+.about-mvp-card .icon i {
+    font-size: 1.75rem;
+}
+
+.about-mvp-card h3 {
+    font-weight: 700;
+    color: var(--sh-ink);
+}
+
+.about-mvp-card p {
+    margin-bottom: 0;
+    font-size: 0.98rem;
+    color: var(--sh-muted);
+}
+
+/* Video feature */
+.about-video-wrap {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #14181f;
+    border-radius: 1.1rem;
+    box-shadow: 0 1.5rem 3rem rgba(28, 20, 20, 0.25);
+}
+
+.about-video-wrap video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.about-video-caption {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--sh-muted);
+}
+
+/* Route cards */
+.about-routes-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.75rem;
+    background: #fff;
+    border: 1px solid var(--sh-line);
+    border-radius: var(--sh-radius-card);
+    box-shadow: 0 0.5rem 1.5rem rgba(28, 20, 20, 0.04);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.about-routes-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0.75rem 2rem rgba(var(--bs-primary-rgb), 0.12);
+}
+
+.about-routes-card h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--sh-red);
+    border-bottom: 2px solid var(--sh-red-tint);
+}
+
+.about-routes-card h4 i {
+    width: 1.5rem;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.about-routes-card ul {
+    flex: 1;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.about-routes-card li {
+    position: relative;
+    margin-bottom: 0.6rem;
+    padding-left: 1.15rem;
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: var(--sh-muted);
+}
+
+.about-routes-card li::before {
+    content: "";
+    position: absolute;
+    top: 0.5em;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    background: var(--sh-red);
+    border-radius: 50%;
+}
+
+/* Call to action */
+.about-cta {
+    position: relative;
+    margin-top: 5.5rem;
+    padding: 3.5rem 1.5rem;
+    overflow: hidden;
+    text-align: center;
+    color: #fff;
+    background: linear-gradient(120deg, var(--sh-ink) 0%, #35191a 100%);
+    border-radius: 1.25rem;
+}
+
+.about-cta h3 {
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.about-cta p {
+    max-width: 520px;
+    margin: 0 auto 1.5rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+@media (max-width: 991.98px) {
+    .about-routes-card h4 {
+        font-size: 0.95rem;
+    }
+
+    .about-routes-card li {
+        font-size: 0.88rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .about-wave svg {
+        height: 50px;
+    }
+
+    .about-stat {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .about-stat:last-child {
+        border-bottom: none;
+    }
+
+    .about-stat-icon {
+        margin-bottom: 0.6rem;
+        font-size: 2.2rem;
+    }
+
+    .about-routes-card {
+        padding: 1.5rem;
+    }
+
+    .about-routes-card h4 {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .about-section .ribbon-tl,
+    .about-section .ribbon-br {
+        width: 140px;
+        height: 140px;
+    }
+
+    .about-stat-icon {
+        margin-bottom: 0.5rem;
+        font-size: 2rem;
+    }
+}
+
+
+/* =============================================================================
+   7. VESSELS CAROUSEL
+   Left: vessel info, specs, features. Right: main photo + thumbnail column
+   (a horizontal strip below 992px). Round-robin prev/next + dots below.
+   ============================================================================= */
+#vessels.page-section {
+    padding: 8rem 0 6rem;
+}
+
+.sh-vc {
+    max-width: 1360px;
+    margin: 0 auto;
+    outline: none;
+}
+
+.sh-vc:focus-visible {
+    outline: var(--sh-focus-ring);
+    outline-offset: 6px;
+    border-radius: var(--bs-border-radius-lg);
+}
+
+/* Track / slides */
+.sh-vc-viewport {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--bs-border-radius-xl);
+    touch-action: pan-y;
+    cursor: grab;
+    transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sh-vc-viewport:active {
+    cursor: grabbing;
+}
+
+/* Only the off-screen slides need clipping (horizontally); letting the
+   active card's shadow paint below the viewport avoids a hard-edged cut.
+   clip-path bounds how far anything may spill downward. Browsers without
+   overflow: clip keep the overflow: hidden above. */
+@supports (overflow: clip) {
+    .sh-vc-viewport {
+        overflow: visible;
+        overflow-x: clip;
+        clip-path: inset(0 0 -8rem 0);
+    }
+}
+
+/* align-items: flex-start keeps each slide at its natural height (the
+   default stretch made every slide as tall as the tallest vessel), so the
+   JS-driven viewport height can match the active slide. */
+.sh-vc-track {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    will-change: transform;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sh-vc-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 0;
+}
+
+.sh-vc-slide__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+    gap: clamp(1.75rem, 3vw, 3rem);
+    align-items: center;
+    padding: clamp(1.75rem, 3vw, 2.75rem);
+    background: #fff;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius-xl);
+    box-shadow: 0 1.75rem 3.25rem -1.75rem rgba(10, 37, 64, 0.28);
+    transition: box-shadow 0.3s ease;
+}
+
+/* Only the visible card casts a shadow; otherwise the neighbouring
+   off-screen slides' shadows bleed in at the carousel edges. */
+.sh-vc-slide:not(.is-active) .sh-vc-slide__grid {
+    box-shadow: none;
+}
+
+/* Info panel */
+.sh-vc-info__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bs-primary);
+}
+
+.sh-vc-info__name {
+    margin-bottom: 1.1rem;
+    font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--sh-navy-deep);
+}
+
+.sh-vc-specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0 0 1.25rem;
+    padding: 0;
+    list-style: none;
+}
+
+.sh-vc-specs__item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.82rem;
+    background: var(--sh-foam);
+    border: 1px solid rgba(10, 37, 64, 0.08);
+    border-radius: var(--bs-border-radius-pill);
+}
+
+.sh-vc-specs__item i {
+    align-self: center;
+    font-size: 0.85rem;
+    color: var(--bs-primary);
+}
+
+.sh-vc-specs__value {
+    font-weight: 700;
+    color: var(--sh-navy-deep);
+}
+
+.sh-vc-specs__label {
+    color: var(--bs-gray-600);
+}
+
+.sh-vc-info__desc {
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    color: var(--bs-gray-700);
+}
+
+.sh-vc-features__title {
+    margin-bottom: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sh-navy);
+}
+
+.sh-vc-features__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sh-vc-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 0.7rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--sh-navy-deep);
+    background: var(--bs-gray-100);
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+}
+
+.sh-vc-feature__icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    font-size: 0.85rem;
+    color: var(--bs-primary);
+    background: #fff;
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.25);
+    border-radius: 50%;
+}
+
+/* Gallery */
+.sh-vc-gallery {
+    display: flex;
+    gap: 0.75rem;
+    height: 100%;
+}
+
+.sh-vc-gallery__main {
+    position: relative;
+    flex: 1 1 auto;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--bs-gray-100);
+    border-radius: var(--bs-border-radius-lg);
+    box-shadow: 0 1.25rem 2.5rem -1.5rem rgba(10, 37, 64, 0.35);
+    touch-action: pan-y;
+}
+
+.sh-vc-gallery__main[tabindex]:focus-visible {
+    outline: 3px solid var(--bs-primary);
+    outline-offset: 2px;
+}
+
+.sh-vc-gallery__main-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.2s ease, transform 0.5s ease;
+}
+
+.sh-vc-gallery__main-img.is-fading {
+    opacity: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .sh-vc-gallery__main:hover .sh-vc-gallery__main-img {
+        transform: scale(1.035);
+    }
+}
+
+.sh-vc-gallery__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    height: 100%;
+    font-size: 0.85rem;
+    color: var(--bs-gray-500);
+}
+
+.sh-vc-gallery__empty i {
+    font-size: 2rem;
+}
+
+.sh-vc-thumbs-wrap {
+    position: relative;
+    flex: 0 0 auto;
+    width: 84px;
+}
+
+/* Trailing-edge fade hinting there is more to scroll; shown only when the
+   strip actually overflows (data-overflowing is set by JS). */
+.sh-vc-thumbs-wrap::after {
+    content: "";
+    position: absolute;
+    right: 4px;
+    bottom: 0;
+    left: 0;
+    height: 28px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.sh-vc-thumbs-wrap[data-overflowing="true"]::after {
+    opacity: 1;
+}
+
+.sh-vc-thumbs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    padding-right: 2px;
+    overflow-y: auto;
+    scroll-snap-type: y proximity;
+    scrollbar-width: thin;
+}
+
+.sh-vc-thumbs::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sh-vc-thumbs::-webkit-scrollbar-thumb {
+    background: var(--bs-border-color);
+    border-radius: 4px;
+}
+
+.sh-vc-thumb {
+    flex: 0 0 auto;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--bs-gray-100);
+    border: 2px solid transparent;
+    border-radius: var(--bs-border-radius);
+    scroll-snap-align: start;
+    transition: border-color 0.2s ease, transform 0.15s ease;
+}
+
+.sh-vc-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sh-vc-thumb:hover {
+    transform: translateY(-2px);
+}
+
+.sh-vc-thumb.is-active {
+    border-color: var(--bs-primary);
+}
+
+/* Vessel-to-vessel navigator */
+.sh-vc-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 2rem;
+}
+
+.sh-vc-arrow {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    font-size: 1.1rem;
+    color: var(--bs-primary);
+    cursor: pointer;
+    background: #fff;
+    border: 1.5px solid var(--bs-primary);
+    border-radius: 50%;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.sh-vc-arrow:hover,
+.sh-vc-arrow:focus-visible {
+    color: #fff;
+    background: var(--bs-primary);
+    box-shadow: 0 0.5rem 1rem -0.4rem rgba(var(--bs-primary-rgb), 0.5);
+    outline: none;
+}
+
+.sh-vc-arrow:active {
+    transform: scale(0.94);
+}
+
+.sh-vc-dots {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sh-vc-dot {
+    width: 9px;
+    height: 9px;
+    padding: 0;
+    cursor: pointer;
+    background: var(--bs-gray-300);
+    border: none;
+    border-radius: 999px;
+    transition: width 0.25s ease, background 0.25s ease;
+}
+
+.sh-vc-dot:hover {
+    background: var(--sh-teal);
+}
+
+.sh-vc-dot.is-active {
+    width: 26px;
+    background: var(--bs-primary);
+}
+
+.sh-vc-swipe-hint {
+    display: none;
+}
+
+/* Tablet & phone: stacked, thumbnails become a horizontal swipeable strip */
+@media (max-width: 991.98px) {
+    #vessels.page-section {
+        padding: 5.5rem 0 4.5rem;
+    }
+
+    .sh-vc-slide__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sh-vc-gallery {
+        flex-direction: column;
+        gap: 0.65rem;
+        margin-top: 1.5rem;
+    }
+
+    .sh-vc-gallery__main {
+        aspect-ratio: 16 / 10;
+    }
+
+    .sh-vc-thumbs-wrap {
+        width: 100%;
+    }
+
+    .sh-vc-thumbs-wrap::after {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: auto;
+        width: 32px;
+        height: auto;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff);
+    }
+
+    .sh-vc-thumbs {
+        flex-direction: row;
+        max-height: none;
+        padding-right: 0;
+        padding-bottom: 4px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x proximity;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .sh-vc-thumbs .sh-vc-thumb {
+        width: 76px;
+        height: 76px;
+    }
+
+    /* Swipe hint, dismissed the first time the visitor drags */
+    .sh-vc-swipe-hint {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        margin-top: 0.6rem;
+        font-size: 0.72rem;
+        color: var(--bs-gray-600);
+        transition: opacity 0.3s ease;
+    }
+
+    .sh-vc[data-swiped="true"] .sh-vc-swipe-hint {
+        opacity: 0;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .sh-vc-slide__grid {
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+
+    .sh-vc-info__name {
+        font-size: 1.4rem;
+    }
+
+    .sh-vc-features__list {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    }
+}
+
+@media (max-width: 575.98px) {
+    .sh-vc-slide__grid {
+        gap: 1.15rem;
+        padding: 1.1rem;
+        border-radius: var(--bs-border-radius-lg);
+    }
+
+    .sh-vc-gallery__main {
+        aspect-ratio: 4 / 3;
+        border-radius: var(--bs-border-radius);
+    }
+
+    .sh-vc-thumbs .sh-vc-thumb {
+        width: 62px;
+        height: 62px;
+    }
+
+    .sh-vc-specs {
+        gap: 0.4rem;
+    }
+
+    .sh-vc-specs__item {
+        padding: 0.32rem 0.65rem;
+        font-size: 0.76rem;
+    }
+
+    .sh-vc-nav {
+        gap: 0.85rem;
+    }
+
+    .sh-vc-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 359.98px) {
+    .sh-vc-features__list {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =============================================================================
+   8. ROUTES — hero banner, port logo marquee
+   ============================================================================= */
+
+/* Banner: rendered at the uploaded image's natural aspect ratio (width/height
+   attributes are set server-side to reserve space and prevent layout shift). */
+.routes-banner {
+    position: relative;
+    overflow: hidden;
+    background: var(--bs-gray-100);
+    border-radius: var(--sh-radius-card);
+    box-shadow: 0 1rem 2.5rem rgba(10, 37, 64, 0.18);
+}
+
+.routes-banner-img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.routes-banner-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(1rem, 3vw, 2rem);
+    color: #fff;
+    background: linear-gradient(to top, rgba(6, 18, 31, 0.85) 0%, rgba(6, 18, 31, 0.15) 45%, transparent 75%);
+}
+
+.routes-banner-eyebrow {
+    display: inline-block;
+    width: fit-content;
+    margin-bottom: 0.35rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sh-gold);
+}
+
+.routes-banner-caption {
+    margin: 0;
+    font-size: clamp(0.9rem, 1.6vw, 1.15rem);
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Port logo marquee — each port is rendered several times per .port-marquee__group
+   and the group is rendered twice; the track slides by exactly one group
+   (-50%), so the loop is seamless. Duration is set by js/scripts.js
+   (--port-marquee-duration) to keep a constant speed for any number of ports. */
+.port-marquee__header {
+    margin-top: 3.5rem;
+    margin-bottom: 1.25rem;
+    text-align: center;
+}
+
+.port-marquee__eyebrow {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sh-gold);
+}
+
+.port-marquee__title {
+    margin: 0;
+    font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+    color: var(--sh-navy-deep);
+}
+
+.port-marquee {
+    --port-gap: clamp(1rem, 2.5vw, 2rem);
+}
+
+/* Soft fade at both edges; padding leaves room for the hover lift + shadow */
+.port-marquee__viewport {
+    overflow: hidden;
+    padding: 1rem 0 1.25rem;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 12%, #000 88%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 12%, #000 88%, transparent 100%);
+}
+
+.port-marquee__track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    animation: scrollRightToLeft var(--port-marquee-duration, 60s) linear infinite;
+}
+
+.port-marquee__viewport:hover .port-marquee__track {
+    animation-play-state: paused;
+}
+
+/* The trailing padding equals the gap, so both groups are exactly the same width */
+.port-marquee__group {
+    display: flex;
+    gap: var(--port-gap);
+    margin: 0;
+    padding: 0 var(--port-gap) 0 0;
+    list-style: none;
+}
+
+.port-logo {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: clamp(118px, 13vw, 168px);
+}
+
+.port-logo__mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: clamp(92px, 10vw, 124px);
+    /* No tile: logos are uploaded as transparent PNG/SVG and sit on the section background */
+    transition: transform 0.3s ease;
+}
+
+.port-logo__mark img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.port-logo__name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--sh-navy-deep);
+}
+
+/* Logos always show in full colour; mouse users just get a small lift on hover. */
+@media (hover: hover) and (pointer: fine) {
+    .port-logo:hover .port-logo__mark {
+        transform: translateY(-4px) scale(1.05);
+    }
+}
+
+.port-marquee__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 1.25rem;
+    padding-bottom: 0.15rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--bs-primary);
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s ease, gap 0.2s ease;
+}
+
+.port-marquee__cta:hover,
+.port-marquee__cta:focus-visible {
+    gap: 0.65rem;
+    color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.port-marquee__cta-icon {
+    flex-shrink: 0;
+    width: 0.9rem;
+    height: 0.9rem;
+    fill: currentColor;
+}
+
+/* Reduced motion: no scrolling — show each port once, wrapped and centred */
+@media (prefers-reduced-motion: reduce) {
+    .port-marquee__viewport {
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
+
+    .port-marquee__track {
+        width: auto;
+        justify-content: center;
+        animation: none;
+    }
+
+    .port-marquee__group {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0 1rem;
+    }
+
+    .port-marquee__group + .port-marquee__group,
+    .port-logo.is-repeat {
+        display: none;
+    }
+}
+
+
+/* =============================================================================
+   9. RATES — fare finder card
+   ============================================================================= */
+#rates.page-section {
+    padding: 8rem 0;
+}
+
+.sh-fare-card {
+    position: relative;
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius-lg);
+    box-shadow: 0 1.5rem 2.75rem -1.5rem rgba(10, 37, 64, 0.22);
+    animation: sh-fade-up 0.5s ease both;
+}
+
+/* Top accent bar */
+.sh-fare-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--sh-navy-deep), var(--bs-primary));
+}
+
+/* Route selector: From / To fields + secondary Swap action */
+.sh-fare-route {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.sh-fare-route__fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.sh-fare-route__actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sh-fare-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--sh-navy);
+}
+
+.sh-fare-swap {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.6rem 1.15rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--sh-navy-deep);
+    cursor: pointer;
+    background: var(--sh-foam);
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius-pill);
+    transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+}
+
+.sh-fare-swap i {
+    font-size: 0.95rem;
+    transition: transform 0.35s ease;
+}
+
+.sh-fare-swap:hover,
+.sh-fare-swap:focus-visible {
+    color: #fff;
+    background: var(--bs-primary);
+    box-shadow: 0 0.6rem 1.1rem -0.5rem rgba(var(--bs-primary-rgb), 0.45);
+    outline: none;
+}
+
+.sh-fare-swap:hover i,
+.sh-fare-swap:focus-visible i,
+.sh-fare-swap.is-swapping i {
+    transform: rotate(180deg);
+}
+
+.sh-fare-swap:active {
+    transform: scale(0.96);
+}
+
+/* Combobox: searchable + freely-typeable From / To fields */
+.sh-fare-combo {
+    position: relative;
+    text-align: left;
+}
+
+.sh-fare-combo__control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sh-fare-combo__control:focus-within {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.2);
+}
+
+.sh-fare-combo__icon {
+    position: absolute;
+    left: 0.85rem;
+    font-size: 0.95rem;
+    color: var(--bs-primary);
+    pointer-events: none;
+}
+
+.sh-fare-combo__input {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.75rem 2.4rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--sh-navy-deep);
+    background: transparent;
+    border: 0;
+    border-radius: inherit;
+}
+
+.sh-fare-combo__input:focus {
+    outline: none;
+}
+
+.sh-fare-combo__clear {
+    position: absolute;
+    right: 0.6rem;
+    padding: 0.3rem;
+    line-height: 0;
+    color: var(--bs-gray-500);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.sh-fare-combo.has-value .sh-fare-combo__clear {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sh-fare-combo__clear:hover {
+    color: var(--sh-navy-deep);
+}
+
+.sh-fare-combo__listbox {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    right: 0;
+    left: 0;
+    z-index: 20;
+    max-height: 14rem;
+    margin: 0;
+    padding: 0.35rem;
+    overflow-y: auto;
+    list-style: none;
+    background: #fff;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    box-shadow: 0 1rem 2rem -0.75rem rgba(10, 37, 64, 0.35);
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.sh-fare-combo__listbox.is-open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.sh-fare-combo__option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.925rem;
+    color: var(--sh-navy-deep);
+    cursor: pointer;
+    border-radius: var(--bs-border-radius-sm);
+    animation: sh-fade-down 0.15s ease both;
+}
+
+.sh-fare-combo__option i {
+    font-size: 0.8rem;
+    color: var(--bs-primary);
+}
+
+.sh-fare-combo__option:hover,
+.sh-fare-combo__option.is-active {
+    background: var(--sh-foam);
+}
+
+.sh-fare-combo__option--empty {
+    font-style: italic;
+    color: var(--bs-gray-600);
+    cursor: default;
+}
+
+.sh-fare-combo__option--empty:hover {
+    background: none;
+}
+
+/* Result panel */
+.sh-fare-divider {
+    margin: 1.75rem 0 1.5rem;
+    border: none;
+    border-top: 1px dashed var(--bs-border-color);
+}
+
+.sh-fare-result {
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+.sh-fare-result.is-fading {
+    opacity: 0;
+}
+
+.sh-fare-groups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.sh-fare-group {
+    flex: 1 1 260px;
+    text-align: center;
+}
+
+.sh-fare-group__title {
+    position: relative;
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sh-navy-deep);
+}
+
+.sh-fare-group__title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 2.25rem;
+    height: 3px;
+    background: var(--bs-primary);
+    border-radius: 2px;
+    transform: translateX(-50%);
+}
+
+.sh-fare-group__image-wrap {
+    overflow: hidden;
+    background: var(--bs-gray-100);
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    box-shadow: 0 1rem 2rem -1.25rem rgba(10, 37, 64, 0.3);
+}
+
+.sh-fare-group__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    opacity: 0;
+    transform: scale(0.98);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.sh-fare-group__image.is-loaded {
+    opacity: 1;
+    transform: scale(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .sh-fare-group__image-wrap:hover .sh-fare-group__image {
+        transform: scale(1.035);
+    }
+}
+
+.sh-fare-group__empty {
+    padding: 2.5rem 1rem;
+    color: var(--bs-gray-600);
+    background: var(--bs-gray-100);
+    border: 1px dashed var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+}
+
+.sh-fare-noroute {
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: var(--bs-gray-600);
+}
+
+.sh-fare-noroute i {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: 2rem;
+    color: var(--bs-primary);
+}
+
+@media (min-width: 576px) {
+    .sh-fare-route__fields {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    #rates.page-section {
+        padding: 5.5rem 0;
+    }
+}
+
+@media (max-width: 767.98px) {
+    #rates.page-section {
+        padding: 4rem 0;
+    }
+
+    .sh-fare-groups {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 575.98px) {
+    #rates.page-section {
+        padding: 3rem 0;
+    }
+
+    .sh-fare-card {
+        padding: 1.5rem 1.15rem;
+    }
+
+    .sh-fare-route__actions {
+        justify-content: center;
+    }
+
+    .sh-fare-swap {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .sh-fare-combo__listbox {
+        max-height: 11rem;
+    }
+}
+
+@media (max-width: 359.98px) {
+    .sh-fare-combo__input {
+        padding-right: 2.1rem;
+        padding-left: 2.1rem;
+        font-size: 0.95rem;
+    }
+
+    .sh-fare-combo__icon {
+        left: 0.65rem;
+        font-size: 0.85rem;
+    }
+
+    .sh-fare-combo__clear {
+        right: 0.4rem;
+    }
+}
+
+
+/* =============================================================================
+   10. FAQS — accordion (scoped to .sh-faq-accordion; Bootstrap's collapse
+   markup and JS are unchanged)
+   ============================================================================= */
+.sh-faq-accordion {
+    --faq-radius: var(--bs-border-radius-lg);
+    --faq-red: var(--bs-primary);
+    --faq-red-dark: var(--bs-link-hover-color);
+    --faq-red-tint: rgba(var(--bs-primary-rgb), 0.07);
+}
+
+.sh-faq-item {
+    margin-bottom: 1rem;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid var(--bs-border-color);
+    border-left: 3px solid transparent;
+    /* !important: overrides Bootstrap's :first-of-type / :last-of-type
+       accordion-item radius rules so every item is a separate rounded card. */
+    border-radius: var(--faq-radius) !important;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sh-faq-item:last-child {
+    margin-bottom: 0;
+}
+
+.sh-faq-item:hover {
+    border-color: var(--faq-red);
+    box-shadow: 0 0.75rem 1.75rem -0.5rem rgba(var(--bs-primary-rgb), 0.22);
+}
+
+/* Left accent bar stays lit while that item is open (progressive
+   enhancement: browsers without :has() keep the transparent border). */
+.sh-faq-item:has(.accordion-button:not(.collapsed)) {
+    border-left-color: var(--faq-red);
+}
+
+.sh-faq-accordion .accordion-button {
+    padding: 1.15rem 1.5rem;
+    font-weight: 600;
+    color: var(--bs-gray-900);
+    background: #fff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sh-faq-accordion .accordion-button:focus {
+    border-color: transparent;
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.sh-faq-accordion .accordion-button:not(.collapsed) {
+    color: var(--faq-red-dark);
+    background: var(--faq-red-tint);
+    box-shadow: inset 0 -1px 0 var(--bs-border-color);
+}
+
+/* Thinner chevron that turns brand red when open */
+.sh-faq-accordion .accordion-button::after {
+    width: 1.1rem;
+    height: 1.1rem;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    background-size: 1.1rem;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sh-faq-accordion .accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23c82020'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    transform: rotate(-180deg);
+}
+
+.sh-faq-accordion .accordion-body {
+    padding: 1.15rem 1.5rem 1.5rem;
+    line-height: 1.7;
+    color: var(--bs-gray-700);
+}
+
+/* Soft fade of the answer text alongside Bootstrap's height transition */
+.sh-faq-accordion .accordion-collapse.collapsing .accordion-body,
+.sh-faq-accordion .accordion-collapse.show .accordion-body {
+    animation: sh-fade-down 0.35s ease;
+}
+
+@media (max-width: 575.98px) {
+    .sh-faq-accordion .accordion-button {
+        padding: 1rem 1.1rem;
+        font-size: 0.95rem;
+    }
+
+    .sh-faq-accordion .accordion-body {
+        padding: 0.9rem 1.1rem 1.25rem;
+        font-size: 0.92rem;
+    }
+}
+
+
+/* =============================================================================
+   11. CAREER — posting cards, Details modal, Apply modal
+   ============================================================================= */
+.sh-career-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius-lg);
+    box-shadow: var(--sh-shadow-card);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .sh-career-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--sh-shadow-card-hover);
+    }
+}
+
+/* Recruitment posters are shown in full (object-fit: contain) so nothing on
+   the 5:4 hiring image is ever cropped; the gradient frames any letterboxing. */
+.sh-career-card__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 5 / 4;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--sh-foam) 0%, #fff 100%);
+}
+
+.sh-career-card__media {
+    position: relative;
+}
+
+.sh-career-card__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.sh-career-card__media-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: var(--sh-teal);
+    opacity: 0.45;
+}
+
+.sh-career-card__media-empty i {
+    font-size: 3rem;
+}
+
+.sh-career-card__body {
+    flex: 1 1 auto;
+    padding: 1.25rem 1.25rem 0.5rem;
+}
+
+.sh-career-card__badge {
+    display: inline-block;
+    margin-bottom: 0.6rem;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--bs-primary);
+    background: rgba(var(--bs-primary-rgb), 0.08);
+    border-radius: var(--bs-border-radius-pill);
+}
+
+.sh-career-card__title {
+    margin-bottom: 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--sh-navy-deep);
+}
+
+.sh-career-card__desc {
+    display: -webkit-box;
+    margin-bottom: 0;
+    overflow: hidden;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--bs-gray-700);
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.sh-career-card__footer {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding: 1rem 1.25rem 1.25rem;
+}
+
+.sh-career-card__footer .btn {
+    flex: 1 1 0;
+}
+
+/* Details modal — poster stacked on top here; poster left / details right
+   from lg up (see the min-width: 992px block below). */
+.sh-career-detail-modal .modal-content {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Floating close button — sits over the poster, so it gets its own backing */
+.sh-career-detail-modal .sh-career-detail__close {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    z-index: 2;
+    padding: 0.6rem;
+    background-color: #fff;
+    border-radius: 50%;
+    opacity: 0.9;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
+}
+
+.sh-career-detail-modal .sh-career-detail__close:hover,
+.sh-career-detail-modal .sh-career-detail__close:focus {
+    opacity: 1;
+}
+
+/* Posters are shown in full (object-fit: contain) — 4:5 portrait and square
+   hiring images both fit without cropping; the gradient frames the rest. */
+.sh-career-detail__media {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    background: linear-gradient(135deg, var(--sh-foam) 0%, #fff 100%);
+}
+
+.sh-career-detail__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.sh-career-detail__zoom {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--sh-navy-deep);
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: var(--bs-border-radius-pill);
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.12);
+}
+
+.sh-career-detail__zoom:hover,
+.sh-career-detail__zoom:focus {
+    color: var(--bs-primary);
+}
+
+.sh-career-detail__info {
+    padding: 1.5rem 1.25rem;
+}
+
+.sh-career-detail__title {
+    margin-bottom: 1.25rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--sh-navy-deep);
+}
+
+/* No poster: details only, kept clear of the floating close button */
+.sh-career-detail--no-media .sh-career-detail__media {
+    display: none;
+}
+
+.sh-career-detail--no-media .sh-career-detail__info {
+    padding-right: 3.75rem;
+}
+
+/* Apply modal: the <form> wraps body + footer, so it has to pass the
+   dialog's height limit down (flex column) or the body can't scroll. */
+.sh-career-apply-form {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+}
+
+/* Stacked layout: a shorter poster, so the form starts within reach */
+@media (max-width: 991.98px) {
+    .sh-career-apply-modal .sh-career-detail__media {
+        height: 28vh;
+    }
+}
+
+@media (min-width: 992px) {
+    .sh-career-detail {
+        display: grid;
+        grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+        grid-template-rows: minmax(0, 1fr);
+        /* Fixed landscape panel: the centered dialog's margins (3.5rem) and
+           the footer (~5rem) fit beneath it on any desktop viewport. */
+        height: min(40rem, calc(100vh - 8.5rem));
+    }
+
+    .sh-career-detail__media {
+        height: auto;
+        border-right: 1px solid var(--bs-border-color);
+    }
+
+    /* The details column scrolls on its own; the poster stays in view. */
+    .sh-career-detail__info {
+        overflow-y: auto;
+        padding: 2rem 2.25rem;
+    }
+
+    .sh-career-detail--no-media {
+        display: block;
+        height: auto;
+    }
+
+    .sh-career-detail--no-media .sh-career-detail__info {
+        overflow-y: visible;
+        padding-right: 4rem;
+    }
+
+    .sh-career-detail__title {
+        font-size: 1.6rem;
+    }
+}
+
+.sh-career-detail-section {
+    margin-bottom: 1.1rem;
+}
+
+.sh-career-detail-section:last-child {
+    margin-bottom: 0;
+}
+
+.sh-career-detail-section h6 {
+    margin-bottom: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sh-navy);
+}
+
+.sh-career-detail-section p {
+    margin-bottom: 0;
+    white-space: pre-wrap;
+    color: var(--bs-gray-700);
+}
+
+/* Resume dropzone */
+.sh-career-resume-drop {
+    padding: 1.25rem 1rem;
+    text-align: center;
+    color: var(--bs-gray-600);
+    cursor: pointer;
+    border: 2px dashed var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.sh-career-resume-drop i {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 1.5rem;
+    color: var(--sh-teal);
+}
+
+.sh-career-resume-drop:hover,
+.sh-career-resume-drop.is-active {
+    background: rgba(var(--bs-primary-rgb), 0.04);
+    border-color: var(--bs-primary);
+}
+
+.sh-career-resume-selected {
+    margin-top: 0.6rem;
+    font-weight: 600;
+    color: var(--sh-navy-deep);
+}
+
+.sh-career-resume-selected .btn-link {
+    padding: 0 0 0 0.35rem;
+}
+
+@media (max-width: 575.98px) {
+    .sh-career-card__body {
+        padding: 1rem 1rem 0.25rem;
+    }
+
+    .sh-career-card__footer {
+        flex-direction: column;
+        padding: 0.85rem 1rem 1rem;
+    }
+
+    /* Full-width stacked buttons get a comfortable thumb target */
+    .sh-career-card__footer .btn {
+        min-height: 44px;
+    }
+
+    .sh-career-detail__media {
+        height: 46vh;
+    }
+}
+
+
+/* =============================================================================
+   12. CONTACT — head office, map, contact details, ports directory
+   Grid areas keep DOM order = mobile reading order (Office → Map → Details →
+   Ports); larger screens just re-map the same areas.
+   ============================================================================= */
+.sh-contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "office"
+        "map"
+        "details"
+        "ports";
+    gap: 1.5rem;
+}
+
+.sh-contact-office {
+    grid-area: office;
+}
+
+.sh-contact-map {
+    grid-area: map;
+}
+
+.sh-contact-details {
+    grid-area: details;
+}
+
+.sh-contact-ports {
+    grid-area: ports;
+}
+
+@media (min-width: 768px) {
+    .sh-contact-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "office map"
+            "details details"
+            "ports ports";
+        align-items: stretch;
+    }
+
+    .sh-contact-map {
+        display: flex;
+    }
+
+    .sh-contact-map__frame,
+    .sh-contact-map__empty {
+        flex: 1 1 auto;
+    }
+}
+
+@media (min-width: 992px) {
+    .sh-contact-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+        grid-template-areas:
+            "office map"
+            "details map"
+            "ports ports";
+    }
+}
+
+/* Card shell (Head Office + Contact Details) */
+.sh-contact-card {
+    height: 100%;
+    padding: 1.75rem;
+    background: #fff;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius-lg);
+    box-shadow: var(--sh-shadow-card);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .sh-contact-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--sh-shadow-card-hover);
+    }
+}
+
+.sh-contact-card__badge {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 1rem;
+    font-size: 1.35rem;
+    color: #fff;
+    background: linear-gradient(135deg, var(--bs-primary) 0%, var(--sh-red-hover) 100%);
+    border-radius: 50%;
+}
+
+.sh-contact-card__title {
+    margin-bottom: 0.9rem;
+    font-weight: 700;
+    color: var(--sh-navy-deep);
+}
+
+.sh-contact-card__subtitle {
+    margin-bottom: 1.1rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--sh-navy-deep);
+}
+
+.sh-contact-address {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    margin-bottom: 1.4rem;
+    line-height: 1.6;
+    color: var(--bs-gray-700);
+}
+
+.sh-contact-address i {
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+    font-size: 1.1rem;
+    color: var(--bs-primary);
+}
+
+.btn-sh-directions {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.65rem 1.35rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--bs-primary);
+    background: rgba(var(--bs-primary-rgb), 0.08);
+    border: 1px solid rgba(var(--bs-primary-rgb), 0.25);
+    border-radius: 10rem;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-sh-directions:hover {
+    color: #fff;
+    background: var(--bs-primary);
+    transform: translateY(-1px);
+}
+
+/* Contact rows (Telephone / Mobile / Email / Facebook) */
+.sh-contact-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.6rem 0;
+    color: var(--bs-gray-800);
+    text-decoration: none;
+    border-bottom: 1px solid var(--bs-border-color-translucent);
+    transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+.sh-contact-row:last-child {
+    border-bottom: none;
+}
+
+.sh-contact-row:hover {
+    padding-left: 0.35rem;
+    color: var(--bs-primary);
+}
+
+.sh-contact-row__icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    font-size: 0.9rem;
+    color: var(--sh-teal);
+    background: var(--sh-foam);
+    border-radius: 50%;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sh-contact-row:hover .sh-contact-row__icon {
+    color: #fff;
+    background: var(--bs-primary);
+}
+
+.sh-contact-row__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.35;
+}
+
+.sh-contact-row__label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--bs-gray-500);
+}
+
+/* Map */
+.sh-contact-map__frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    overflow: hidden;
+    border: 1px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius-lg);
+    box-shadow: var(--sh-shadow-card);
+}
+
+.sh-contact-map__frame iframe {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.sh-contact-map__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    min-height: 260px;
+    color: var(--bs-gray-500);
+    background: var(--sh-foam);
+    border: 1px dashed var(--bs-border-color);
+    border-radius: var(--bs-border-radius-lg);
+}
+
+.sh-contact-map__empty i {
+    font-size: 2rem;
+    opacity: 0.6;
+}
+
+/* Ports directory */
+.sh-contact-ports__title {
+    margin-bottom: 1.1rem;
+    font-weight: 700;
+    color: var(--sh-navy-deep);
+}
+
+.sh-port-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+}
+
+.sh-port-card {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.9rem 1rem;
+    color: var(--bs-gray-800);
+    text-decoration: none;
+    background: #fff;
+    border: 1px solid var(--bs-border-color);
+    border-left: 3px solid transparent;
+    border-radius: var(--bs-border-radius);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.sh-port-card:hover {
+    color: var(--bs-gray-800);
+    border-color: var(--bs-border-color);
+    border-left-color: var(--bs-primary);
+    box-shadow: 0 0.75rem 1.5rem -0.75rem rgba(var(--bs-primary-rgb), 0.28);
+    transform: translateY(-2px);
+}
+
+.sh-port-card__icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+    color: var(--sh-teal);
+    background: var(--sh-foam);
+    border-radius: 50%;
+}
+
+.sh-port-card__body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.35;
+}
+
+.sh-port-card__name {
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
+.sh-port-card__phone {
+    font-size: 0.85rem;
+    color: var(--bs-gray-600);
+}
+
+.sh-port-card:hover .sh-port-card__phone {
+    color: var(--bs-primary);
+}
+
+.sh-contact-empty--inline {
+    max-width: none;
+    margin: 0;
+}
+
+@media (min-width: 576px) {
+    .sh-port-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .sh-port-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Keep the map compact on large monitors */
+@media (min-width: 1400px) {
+    .sh-contact-map {
+        align-items: center;
+    }
+
+    .sh-contact-map__frame {
+        max-height: 480px;
+    }
+}
+
+/* Small phones: wrap long strings, full-width directions button, 44px
+   minimum touch targets on tappable rows (WCAG 2.5.5). */
+@media (max-width: 575.98px) {
+    .sh-contact-card {
+        padding: 1.35rem;
+    }
+
+    .sh-contact-map__frame,
+    .sh-contact-map__empty {
+        min-height: 220px;
+    }
+
+    .sh-contact-address span,
+    .sh-contact-row__text span,
+    .sh-port-card__name {
+        overflow-wrap: anywhere;
+    }
+
+    .btn-sh-directions {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .sh-contact-row,
+    .sh-port-card {
+        min-height: 44px;
+    }
+}
+
+
+/* =============================================================================
+   13. FOOTER — wave + vessel stage, main columns, bottom bar
+   ============================================================================= */
+.sh-footer {
+    position: relative;
+    font-family: var(--bs-body-font-family);
+    color: rgba(255, 255, 255, 0.82);
+    background: var(--sh-burgundy);
+}
+
+.sh-footer a {
+    text-decoration: none;
+}
+
+/* Wave + vessel stage. No background of its own, so the page background
+   shows above the wave; the wave shares the footer's burgundy fill. */
+.sh-footer-wave-stage {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: clamp(130px, 20vw, 220px);
+    overflow: hidden;
+}
+
+.sh-footer-wave {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: var(--sh-burgundy);
+}
+
+.sh-footer-vessel-wrap {
+    position: absolute;
+    top: 6%;
+    left: 4%;
+    z-index: 3;
+    width: clamp(104px, 15vw, 200px);
+}
+
+.sh-footer-vessel-float {
+    position: relative;
+    display: block;
+}
+
+.sh-footer-vessel {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.35));
+}
+
+.sh-footer-vessel-wake {
+    position: absolute;
+    bottom: 2%;
+    left: -8%;
+    z-index: 0;
+    width: 55%;
+    height: auto;
+    opacity: 0.6;
+}
+
+/* Main columns */
+.sh-footer-main {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 0 3rem;
+}
+
+.sh-footer-heading {
+    position: relative;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    font-family: var(--sh-font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.sh-footer-heading::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 2.5rem;
+    height: 3px;
+    background: var(--sh-red);
+    border-radius: 2px;
+}
+
+.sh-footer-logo-badge {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding: 0.65rem 1.1rem;
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.75rem 1.75rem rgba(0, 0, 0, 0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.sh-footer-logo-badge:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.4);
+}
+
+.sh-footer-logo-badge img {
+    display: block;
+    width: auto;
+    height: 52px;
+}
+
+.sh-footer-desc {
+    max-width: 360px;
+    margin-bottom: 1.75rem;
+    font-size: 0.94rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.sh-footer-social-label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-family: var(--sh-font-heading);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.62);
+}
+
+.sh-footer-social {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sh-footer-social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.sh-footer-social-icon:hover,
+.sh-footer-social-icon:focus-visible {
+    color: #fff;
+    background: var(--sh-red);
+    box-shadow: 0 0.6rem 1.25rem rgba(var(--bs-primary-rgb), 0.45);
+    transform: translateY(-4px) scale(1.08);
+}
+
+.sh-footer-links,
+.sh-footer-contact-list {
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.sh-footer-links li {
+    margin-bottom: 0.7rem;
+}
+
+.sh-footer-links a {
+    position: relative;
+    display: inline-block;
+    padding-left: 0.9rem;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.72);
+    transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+.sh-footer-links a::before {
+    content: "";
+    position: absolute;
+    top: 0.55em;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    background: var(--sh-red);
+    border-radius: 50%;
+}
+
+.sh-footer-links a:hover,
+.sh-footer-links a:focus-visible {
+    padding-left: 1.2rem;
+    color: #fff;
+}
+
+.sh-footer-contact-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    margin-bottom: 1.1rem;
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.sh-footer-contact-list li:last-child {
+    margin-bottom: 0;
+}
+
+.sh-footer-contact-list i {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+    color: var(--sh-red);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0.6rem;
+}
+
+.sh-footer-contact-list a {
+    color: rgba(255, 255, 255, 0.78);
+    transition: color 0.2s ease;
+}
+
+.sh-footer-contact-list a:hover,
+.sh-footer-contact-list a:focus-visible {
+    color: #fff;
+}
+
+.sh-footer-book-btn {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.6rem;
+    font-family: var(--sh-font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--sh-red);
+    border-radius: 50rem;
+    box-shadow: 0 0.6rem 1.5rem rgba(var(--bs-primary-rgb), 0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.sh-footer-book-btn:hover,
+.sh-footer-book-btn:focus-visible {
+    color: #fff;
+    background: var(--sh-red-hover);
+    box-shadow: 0 0.85rem 1.85rem rgba(var(--bs-primary-rgb), 0.45);
+    transform: translateY(-3px);
+}
+
+/* Bottom bar */
+.sh-footer-bottom {
+    position: relative;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.18);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.sh-footer-bottom-inner {
+    padding: 1.35rem 0;
+    text-align: center;
+}
+
+.sh-footer-copy {
+    margin: 0;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Vessel placement nudges so the hull rests on the wave crest */
+@media (min-width: 576px) {
+    .sh-footer-vessel-wrap {
+        top: 5%;
+        left: 5%;
+    }
+}
+
+@media (min-width: 768px) {
+    .sh-footer-vessel-wrap {
+        top: 4%;
+        left: 6%;
+    }
+}
+
+@media (min-width: 992px) {
+    .sh-footer-vessel-wrap {
+        top: 3%;
+        left: 7%;
+    }
+}
+
+@media (min-width: 1400px) {
+    .sh-footer-vessel-wrap {
+        left: 8%;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .sh-footer-main {
+        padding: 4.25rem 0 2.75rem;
+    }
+
+    .sh-footer-col {
+        margin-bottom: 0.5rem;
+    }
+
+    .sh-footer-heading {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Phones: single centred column */
+@media (max-width: 767.98px) {
+    .sh-footer-main {
+        padding: 3.25rem 0 2.25rem;
+        text-align: center;
+    }
+
+    .sh-footer-col {
+        margin-bottom: 1.75rem;
+    }
+
+    .sh-footer-col:last-child {
+        margin-bottom: 0;
+    }
+
+    .sh-footer-desc {
+        max-width: 420px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .sh-footer-heading::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .sh-footer-social {
+        justify-content: center;
+    }
+
+    .sh-footer-links a,
+    .sh-footer-links a:hover,
+    .sh-footer-links a:focus-visible {
+        padding-left: 0;
+    }
+
+    .sh-footer-links a::before {
+        display: none;
+    }
+
+    .sh-footer-contact-list li {
+        justify-content: center;
+        text-align: left;
+    }
+
+    .sh-footer-book-btn {
+        margin-top: 1.25rem;
+    }
+}
+
+@media (max-width: 413.98px) {
+    .sh-footer-wave-stage {
+        height: clamp(100px, 26vw, 150px);
+    }
+
+    .sh-footer-main {
+        padding: 2.75rem 0 2rem;
+    }
+
+    .sh-footer-heading {
+        font-size: 0.88rem;
+    }
+
+    .sh-footer-desc {
+        font-size: 0.9rem;
+    }
+
+    .sh-footer-contact-list i {
+        width: 34px;
+        height: 34px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 374.98px) {
+    .sh-footer-main {
+        padding: 2.5rem 0 1.75rem;
+    }
+
+    .sh-footer-logo-badge img {
+        height: 44px;
+    }
+}
+
+
+/* =============================================================================
+   14. ANIMATIONS
+   ============================================================================= */
+@keyframes scrollRightToLeft {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* Generic entrance: fade + rise */
+@keyframes sh-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Generic entrance: fade + drop (dropdown options, accordion answers) */
+@keyframes sh-fade-down {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Vessel feature chips cascade in when their slide becomes active */
+.sh-vc-slide.is-active .sh-vc-feature {
+    opacity: 0;
+    transform: translateY(6px);
+    animation: sh-fade-up 0.35s ease forwards;
+}
+
+.sh-vc-slide.is-active .sh-vc-feature:nth-child(1) { animation-delay: 0.02s; }
+.sh-vc-slide.is-active .sh-vc-feature:nth-child(2) { animation-delay: 0.06s; }
+.sh-vc-slide.is-active .sh-vc-feature:nth-child(3) { animation-delay: 0.1s; }
+.sh-vc-slide.is-active .sh-vc-feature:nth-child(4) { animation-delay: 0.14s; }
+.sh-vc-slide.is-active .sh-vc-feature:nth-child(5) { animation-delay: 0.18s; }
+.sh-vc-slide.is-active .sh-vc-feature:nth-child(6) { animation-delay: 0.22s; }
+.sh-vc-slide.is-active .sh-vc-feature:nth-child(n+7) { animation-delay: 0.26s; }
+
+/* Scroll reveal ([data-animate-in], driven by js/scripts.js). Scoped to
+   html.js so content is never hidden when JavaScript is unavailable. The
+   script removes the attribute once the entrance finishes, so hover
+   transforms on the revealed element keep working afterwards. */
+.js [data-animate-in] {
+    opacity: 0;
+    transform: translateY(14px);
+}
+
+.js [data-animate-in].is-visible {
+    animation: sh-reveal-in 0.5s ease forwards;
+}
+
+@keyframes sh-reveal-in {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Footer vessel sails in once, the first time the footer scrolls into view.
+   The hidden start pose only applies after JS adds .js-vessel-ready. */
+@media (prefers-reduced-motion: no-preference) {
+    .sh-footer-vessel-wrap.js-vessel-ready {
+        opacity: 0;
+        transform: translateX(-160%) translateY(10px);
+    }
+
+    .sh-footer-vessel-wrap.js-vessel-ready.sh-vessel-animate {
+        animation: shFooterShipEnter 1.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+    }
+}
+
+@keyframes shFooterShipEnter {
+    0% {
+        opacity: 0;
+        transform: translateX(-160%) translateY(10px);
+    }
+
+    55% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0) translateY(0);
+    }
+}
+
+/* Reduced motion: one consolidated override for every animated component */
+@media (prefers-reduced-motion: reduce) {
+    .sh-vc-track,
+    .sh-vc-viewport,
+    .sh-vc-gallery__main-img,
+    .sh-vc-feature,
+    .sh-vc-arrow,
+    .sh-vc-dot,
+    .port-logo__mark,
+    .port-logo__mark img,
+    .port-marquee__cta,
+    .sh-fare-card,
+    .sh-fare-group__image,
+    .sh-fare-swap,
+    .sh-fare-swap i,
+    .sh-fare-combo__option,
+    .sh-fare-result,
+    .sh-faq-item,
+    .sh-faq-accordion .accordion-button,
+    .sh-faq-accordion .accordion-button::after,
+    .sh-faq-accordion .accordion-body,
+    .sh-career-card,
+    .sh-contact-card,
+    .sh-port-card {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .sh-vc-slide.is-active .sh-vc-feature,
+    .js [data-animate-in] {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+    }
+}

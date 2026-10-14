@@ -1,0 +1,1767 @@
+/* =============================================================================
+   Starhorse Vessel Admin — Core Stylesheet
+   -----------------------------------------------------------------------------
+   Brand tokens pulled directly from the public site's styles.css so the CMS
+   feels like part of the same product rather than a bolted-on template.
+   ============================================================================= */
+
+:root {
+  /* Brand colors (from public site) */
+  --sh-primary: #c82020;
+  --sh-primary-dark: #a01a1a;
+  --sh-navy-deep: #0a2540;
+  --sh-navy: #123a5c;
+  --sh-teal: #1c6e8c;
+  --sh-gold: #c9a24b;
+  --sh-foam: #eaf4f7;
+
+  /* Neutral scale */
+  --sh-gray-50: #f9fbfe;
+  --sh-gray-100: #f4f6f9;
+  --sh-gray-200: #e9ecef;
+  --sh-gray-300: #dee2e6;
+  --sh-gray-600: #6c757d;
+  --sh-gray-800: #343a40;
+  --sh-gray-900: #212529;
+
+  /* Layout */
+  --sh-sidebar-width: 264px;
+  --sh-sidebar-width-collapsed: 76px;
+  --sh-topbar-height: 68px;
+
+  /* Elevation / shape */
+  --sh-radius: 0.75rem;
+  --sh-radius-sm: 0.5rem;
+  --sh-shadow-sm: 0 2px 8px rgba(10, 37, 64, 0.06);
+  --sh-shadow-md: 0 10px 30px rgba(10, 37, 64, 0.1);
+
+  /* Typography */
+  --sh-font:
+    "Century Gothic", "CenturyGothic", "Poppins", "Segoe UI", Avenir, Futura,
+    -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body.sh-admin-body {
+  margin: 0;
+  font-family: var(--sh-font);
+  background: var(--sh-gray-100);
+  color: var(--sh-gray-900);
+  -webkit-font-smoothing: antialiased;
+}
+
+.sh-admin-body a {
+  text-decoration: none;
+}
+
+/* -----------------------------------------------------------------------
+   Layout shell
+   ----------------------------------------------------------------------- */
+.sh-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* -----------------------------------------------------------------------
+   Sidebar
+   ----------------------------------------------------------------------- */
+.sh-sidebar {
+  width: var(--sh-sidebar-width);
+  flex-shrink: 0;
+  background: linear-gradient(180deg, var(--sh-navy-deep) 0%, #081b30 100%);
+  color: var(--sh-foam);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1030;
+  transition:
+    width 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sh-shell.sh-collapsed .sh-sidebar {
+  width: var(--sh-sidebar-width-collapsed);
+}
+
+.sh-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1.1rem 1.25rem;
+  height: var(--sh-topbar-height);
+  border-bottom: 1px solid rgba(234, 244, 247, 0.08);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sh-sidebar__brand .sh-logo-link {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Full logo — shown when the sidebar is expanded.
+   width:100%/height:auto/object-fit:contain scales it proportionally
+   to fill the available brand-bar space without ever distorting or
+   overflowing it, regardless of the source image's native size. */
+.sh-logo-full {
+  display: block;
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+  max-height: 40px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* Compact logo — shown only when the sidebar is collapsed. Square-ish
+   footprint sized to the collapsed rail width so it stays legible
+   instead of shrinking a wide wordmark into an unreadable sliver. */
+.sh-logo-compact {
+  display: none;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.sh-collapsed .sh-sidebar__brand {
+  justify-content: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.sh-collapsed .sh-logo-full {
+  display: none;
+}
+
+.sh-collapsed .sh-logo-compact {
+  display: block;
+}
+
+.sh-collapsed .sh-nav-label,
+.sh-collapsed .sh-nav-section-title {
+  display: none;
+}
+
+.sh-sidebar__nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 0.75rem;
+}
+
+.sh-nav-section-title {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(234, 244, 247, 0.45);
+  padding: 0.75rem 0.75rem 0.4rem;
+}
+
+.sh-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--sh-radius-sm);
+  color: rgba(234, 244, 247, 0.85);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.15rem;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.sh-nav-item i {
+  font-size: 1.05rem;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sh-nav-item:hover {
+  background: rgba(234, 244, 247, 0.08);
+  color: #fff;
+}
+
+.sh-nav-item.active {
+  background: var(--sh-primary);
+  color: #fff;
+  box-shadow: var(--sh-shadow-sm);
+}
+
+.sh-nav-item .sh-badge-soon {
+  margin-left: auto;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  background: rgba(201, 162, 75, 0.2);
+  color: var(--sh-gold);
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+}
+
+.sh-collapsed .sh-badge-soon {
+  display: none;
+}
+
+.sh-sidebar__footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid rgba(234, 244, 247, 0.08);
+  font-size: 0.75rem;
+  color: rgba(234, 244, 247, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* -----------------------------------------------------------------------
+   Main column (topbar + content)
+   ----------------------------------------------------------------------- */
+.sh-main {
+  margin-left: var(--sh-sidebar-width);
+  flex: 1;
+  min-width: 0;
+  transition: margin-left 0.2s ease;
+}
+
+.sh-collapsed .sh-main {
+  margin-left: var(--sh-sidebar-width-collapsed);
+}
+
+.sh-topbar {
+  height: var(--sh-topbar-height);
+  background: #fff;
+  border-bottom: 1px solid var(--sh-gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+.sh-topbar__left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sh-sidebar-toggle {
+  border: none;
+  background: var(--sh-gray-100);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--sh-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sh-navy-deep);
+  cursor: pointer;
+}
+
+.sh-sidebar-toggle:hover {
+  background: var(--sh-gray-200);
+}
+
+.sh-page-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--sh-navy-deep);
+  margin: 0;
+}
+
+.sh-topbar__right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sh-user-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+  border-radius: 999px;
+  background: var(--sh-gray-100);
+}
+
+.sh-user-chip .sh-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--sh-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.sh-user-chip .sh-user-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--sh-gray-900);
+}
+.sh-user-chip .sh-user-role {
+  font-size: 0.7rem;
+  color: var(--sh-gray-600);
+  display: block;
+}
+
+.sh-content {
+  padding: 1.75rem;
+}
+
+/* -----------------------------------------------------------------------
+   Cards / surfaces
+   ----------------------------------------------------------------------- */
+.sh-card {
+  background: #fff;
+  border: 1px solid var(--sh-gray-200);
+  border-radius: var(--sh-radius);
+  box-shadow: var(--sh-shadow-sm);
+}
+
+.sh-card__header {
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid var(--sh-gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.sh-card__title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--sh-navy-deep);
+}
+.sh-card__body {
+  padding: 1.4rem;
+}
+
+.sh-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.35rem;
+}
+
+.sh-stat-card .sh-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--sh-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.sh-stat-card .sh-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--sh-navy-deep);
+  line-height: 1.1;
+}
+.sh-stat-card .sh-stat-label {
+  font-size: 0.8rem;
+  color: var(--sh-gray-600);
+}
+
+/* -----------------------------------------------------------------------
+   Buttons (kept close to Bootstrap, re-themed)
+   ----------------------------------------------------------------------- */
+.btn-sh-primary {
+  background: var(--sh-primary);
+  border-color: var(--sh-primary);
+  color: #fff;
+  font-weight: 600;
+  border-radius: var(--sh-radius-sm);
+}
+.btn-sh-primary:hover {
+  background: var(--sh-primary-dark);
+  border-color: var(--sh-primary-dark);
+  color: #fff;
+}
+
+.btn-sh-outline {
+  background: transparent;
+  border: 1px solid var(--sh-gray-300);
+  color: var(--sh-gray-800);
+  border-radius: var(--sh-radius-sm);
+  font-weight: 600;
+}
+.btn-sh-outline:hover {
+  background: var(--sh-gray-100);
+}
+
+.sh-icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--sh-radius-sm);
+  border: 1px solid var(--sh-gray-300);
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sh-gray-800);
+}
+.sh-icon-btn:hover {
+  background: var(--sh-gray-100);
+}
+.sh-icon-btn.sh-icon-btn--danger {
+  color: var(--sh-primary);
+  border-color: rgba(200, 32, 32, 0.35);
+}
+.sh-icon-btn.sh-icon-btn--danger:hover {
+  background: rgba(200, 32, 32, 0.08);
+}
+
+/* -----------------------------------------------------------------------
+   Table
+   ----------------------------------------------------------------------- */
+.sh-table thead th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--sh-gray-600);
+  border-bottom: 2px solid var(--sh-gray-200);
+  white-space: nowrap;
+}
+
+.sh-table td {
+  vertical-align: middle;
+}
+
+.sh-table .sh-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--sh-radius-sm);
+  object-fit: cover;
+  background: var(--sh-gray-100);
+}
+
+/* Logos (Routes > Ports We Serve) are shown whole on a white tile */
+.sh-table .sh-thumb--contain {
+  object-fit: contain;
+  padding: 4px;
+  background: #fff;
+  border: 1px solid var(--sh-gray-200);
+}
+
+.sh-status-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+.sh-status-pill--published {
+  background: rgba(25, 135, 84, 0.12);
+  color: #198754;
+}
+.sh-status-pill--draft {
+  background: rgba(108, 117, 125, 0.15);
+  color: #6c757d;
+}
+.sh-status-pill--active {
+  background: rgba(25, 135, 84, 0.12);
+  color: #198754;
+}
+.sh-status-pill--inactive {
+  background: rgba(200, 32, 32, 0.12);
+  color: var(--sh-primary);
+}
+
+.sh-access-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+.sh-access-pill--administrator {
+  background: rgba(201, 162, 75, 0.18);
+  color: #97772f;
+}
+.sh-access-pill--user {
+  background: rgba(18, 58, 92, 0.1);
+  color: var(--sh-navy);
+}
+
+/* -----------------------------------------------------------------------
+   Table row avatars (User Management)
+   Stored files are already pre-cropped to a square by
+   process_and_store_profile_image() (see functions/helpers.php); this is
+   the "avatar" presentation on top of that square source — a ring border
+   and soft shadow so it reads as a person's photo, not just a thumbnail.
+   ----------------------------------------------------------------------- */
+.sh-table .sh-avatar-thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--sh-gray-100);
+  border: 2px solid #fff;
+  box-shadow:
+    0 0 0 1.5px var(--sh-gray-300),
+    var(--sh-shadow-sm);
+  flex-shrink: 0;
+}
+.sh-table .sh-avatar-fallback {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    var(--sh-navy) 0%,
+    var(--sh-navy-deep) 100%
+  );
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  border: 2px solid #fff;
+  box-shadow:
+    0 0 0 1.5px var(--sh-gray-300),
+    var(--sh-shadow-sm);
+  flex-shrink: 0;
+}
+
+/* -----------------------------------------------------------------------
+   Avatar dropzone (User Management — single profile photo picker)
+   Shows exactly one state at a time: placeholder, or the current/new
+   photo, plus a small remove button. Deliberately separate from the
+   generic multi-file .sh-dropzone used by the Vessel gallery.
+   ----------------------------------------------------------------------- */
+.sh-avatar-dropzone {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 2px dashed var(--sh-gray-300);
+  background: var(--sh-gray-50);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+.sh-avatar-dropzone:hover,
+.sh-avatar-dropzone.sh-dropzone--active {
+  border-color: var(--sh-primary);
+  background: rgba(200, 32, 32, 0.04);
+}
+.sh-avatar-dropzone__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--sh-gray-600);
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  padding: 0 0.5rem;
+}
+.sh-avatar-dropzone__placeholder i {
+  font-size: 1.5rem;
+  color: var(--sh-gold);
+}
+.sh-avatar-dropzone__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.sh-avatar-dropzone__remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(10, 37, 64, 0.8);
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.sh-avatar-dropzone__remove:hover {
+  background: var(--sh-primary);
+}
+
+/* -----------------------------------------------------------------------
+   Routes Hero banner preview (Routes Gallery Management)
+   The "current banner" preview used to be a bare <img> with no sizing
+   rule at all, so it rendered at the uploaded file's native resolution
+   (banners run ~1600px wide) and pushed the whole page down. This caps
+   it to a fixed, compact height — like every other admin thumbnail —
+   with a hover affordance to view the image full-size in a modal instead
+   of letting it dominate the page by default.
+   ----------------------------------------------------------------------- */
+.sh-banner-preview {
+  appearance: none;
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--sh-gray-200);
+  border-radius: var(--sh-radius-sm);
+  overflow: hidden;
+  cursor: zoom-in;
+  background: var(--sh-gray-100);
+  line-height: 0;
+  outline: none;
+}
+.sh-banner-preview-img {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+.sh-banner-preview:hover .sh-banner-preview-img {
+  transform: scale(1.03);
+}
+.sh-banner-preview__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(10, 37, 64, 0.45);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.sh-banner-preview:hover .sh-banner-preview__overlay,
+.sh-banner-preview:focus-visible .sh-banner-preview__overlay {
+  opacity: 1;
+}
+.sh-banner-preview:focus-visible {
+  outline: 2px solid var(--sh-primary);
+  outline-offset: 2px;
+}
+
+/* Full-size banner view (modal triggered by clicking the preview) */
+.sh-banner-preview-modal {
+  position: relative;
+  background: transparent;
+  border: 0;
+}
+.sh-banner-preview-modal .btn-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 0.5rem;
+  opacity: 0.9;
+}
+.sh-banner-preview-modal img {
+  display: block;
+  width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: var(--sh-radius);
+  background: var(--sh-gray-900);
+}
+
+/* -----------------------------------------------------------------------
+   Breadcrumb (used on module pages that want extra wayfinding)
+   ----------------------------------------------------------------------- */
+.sh-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--sh-gray-600);
+  margin-bottom: 1rem;
+}
+.sh-breadcrumb a {
+  color: var(--sh-gray-600);
+}
+.sh-breadcrumb a:hover {
+  color: var(--sh-primary);
+}
+.sh-breadcrumb .sh-breadcrumb-current {
+  color: var(--sh-navy-deep);
+  font-weight: 600;
+}
+
+/* -----------------------------------------------------------------------
+   Image upload / drag & drop
+   ----------------------------------------------------------------------- */
+.sh-dropzone {
+  border: 2px dashed var(--sh-gray-300);
+  border-radius: var(--sh-radius);
+  padding: 1.75rem 1rem;
+  text-align: center;
+  color: var(--sh-gray-600);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+.sh-dropzone:hover,
+.sh-dropzone.sh-dropzone--active {
+  border-color: var(--sh-primary);
+  background: rgba(200, 32, 32, 0.04);
+}
+.sh-dropzone i {
+  font-size: 1.6rem;
+  color: var(--sh-gold);
+}
+
+.sh-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.sh-preview-item {
+  position: relative;
+  border-radius: var(--sh-radius-sm);
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  background: var(--sh-gray-100);
+  border: 1px solid var(--sh-gray-200);
+}
+.sh-preview-item img {
+  width: 100%;
+  height: 100%;
+  /* contain (not cover) — the box stays a fixed, compact square either
+     way, but contain shows the uploaded file exactly as it will be
+     stored instead of cropping it, which matters most for the wide
+     banner image and for SVGs that may not be square. */
+  object-fit: contain;
+  display: block;
+}
+.sh-preview-item .sh-preview-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(10, 37, 64, 0.75);
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+/* -----------------------------------------------------------------------
+   Auth / login screen
+   ----------------------------------------------------------------------- */
+.sh-auth-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    120% 120% at 50% 0%,
+    var(--sh-navy) 0%,
+    var(--sh-navy-deep) 60%,
+    #06121f 100%
+  );
+  font-family: var(--sh-font);
+  padding: 1.5rem;
+}
+
+.sh-auth-card {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: var(--sh-radius);
+  box-shadow: var(--sh-shadow-md);
+  padding: 2.25rem 2rem;
+}
+
+.sh-auth-card .sh-mark {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--sh-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin: 0 auto 1rem;
+}
+
+.sh-auth-card h1 {
+  font-size: 1.15rem;
+  text-align: center;
+  margin-bottom: 0.15rem;
+  color: var(--sh-navy-deep);
+}
+.sh-auth-card p.sh-sub {
+  text-align: center;
+  color: var(--sh-gray-600);
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+/* -----------------------------------------------------------------------
+   Placeholder / "coming soon" module pages
+   ----------------------------------------------------------------------- */
+.sh-coming-soon {
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+  color: var(--sh-gray-600);
+}
+.sh-coming-soon i {
+  font-size: 2.5rem;
+  color: var(--sh-gold);
+  margin-bottom: 1rem;
+}
+
+/* -----------------------------------------------------------------------
+   Responsive
+   ----------------------------------------------------------------------- */
+@media (max-width: 991.98px) {
+  .sh-sidebar {
+    transform: translateX(-100%);
+    width: var(--sh-sidebar-width);
+  }
+  .sh-shell.sh-mobile-open .sh-sidebar {
+    transform: translateX(0);
+  }
+  .sh-main {
+    margin-left: 0;
+  }
+  .sh-shell.sh-collapsed .sh-main {
+    margin-left: 0;
+  }
+  .sh-content {
+    padding: 1.1rem;
+  }
+}
+
+/* -----------------------------------------------------------------------
+   Modals — three-part layout: fixed header, scrollable body, fixed footer
+   ---------------------------------------------------------------------
+   Bootstrap already ships most of this via .modal-dialog-scrollable, but
+   we restate it here (admin.css loads after bootstrap.min.css, so it
+   wins the cascade) both to guarantee it regardless of any CDN hiccup,
+   and to fix two real bugs the default/previous CSS still had:
+
+   1. Every modal in the User Management module now carries
+      .modal-dialog-scrollable on its .modal-dialog (Add/Edit User,
+      Change Password, and Delete confirmation). Previously only the
+      Add/Edit modal had it — Change Password and Delete didn't, so
+      their content could overflow the viewport with no internal
+      scrollbar at all.
+
+   2. `100vh` is NOT the same as "the visible viewport" on phones: most
+      mobile browsers keep their address bar reserved out of `vh` even
+      though it can slide away, so a `calc(100vh - Xrem)` cap can still
+      be taller than what's actually on screen — which is exactly what
+      let the Save/Update button end up below the visible fold on
+      mobile, forcing a pinch-zoom-out to reach it. `dvh` (dynamic
+      viewport height) reflects the real, currently-visible viewport;
+      we declare the `vh` value FIRST as a fallback for older browsers,
+      then the `dvh` value after it — a browser that doesn't recognize
+      `dvh` simply ignores that line and keeps the `vh` fallback.
+   ----------------------------------------------------------------------- */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--sh-radius);
+  border: none;
+  box-shadow: var(--sh-shadow-md);
+}
+.modal-header,
+.modal-footer {
+  border-color: var(--sh-gray-200);
+}
+.modal-title {
+  font-weight: 700;
+  color: var(--sh-navy-deep);
+}
+
+.modal-dialog-scrollable {
+  max-height: calc(100vh - 3.5rem);
+  max-height: calc(100dvh - 3.5rem);
+}
+.modal-dialog-scrollable .modal-content {
+  max-height: calc(100vh - 3.5rem);
+  max-height: calc(100dvh - 3.5rem);
+  overflow: hidden; /* only .modal-body scrolls — header/footer stay put */
+}
+.modal-dialog-scrollable .modal-header,
+.modal-dialog-scrollable .modal-footer {
+  flex-shrink: 0; /* fixed — never squeezed or scrolled by a tall body */
+}
+.modal-dialog-scrollable .modal-body {
+  flex: 1 1 auto; /* the ONLY part of the modal that grows/scrolls */
+  overflow-y: auto;
+  overscroll-behavior: contain; /* stop scroll from "chaining" into the page behind once the body hits its own top/bottom edge */
+  -webkit-overflow-scrolling: touch; /* smooth momentum scroll on touch devices */
+  max-height: 100%;
+  min-height: 0; /* flexbox: without this, a flex child won't shrink below its
+                    content's intrinsic height in some browsers, which silently
+                    defeats overflow-y: auto and the header/footer stay-put fix */
+}
+
+/* Desktop / tablet: comfortably centered, capped well inside the viewport
+   so long forms (Add/Edit Vessel, Add/Edit User) always leave the footer
+   buttons reachable via the modal's own internal scrollbar. */
+@media (min-width: 576px) {
+  .modal-dialog-scrollable {
+    max-height: calc(100vh - 4.5rem);
+    max-height: calc(100dvh - 4.5rem);
+  }
+  .modal-dialog-scrollable .modal-content {
+    max-height: calc(100vh - 4.5rem);
+    max-height: calc(100dvh - 4.5rem);
+  }
+}
+
+/* Mobile: near-fullscreen so there's no wasted margin and the internal
+   scroll area gets the maximum room on small screens. */
+@media (max-width: 575.98px) {
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+  .modal-dialog-scrollable {
+    max-height: calc(100vh - 1rem);
+    max-height: calc(100dvh - 1rem);
+  }
+  .modal-dialog-scrollable .modal-content {
+    max-height: calc(100vh - 1rem);
+    max-height: calc(100dvh - 1rem);
+  }
+  .modal-body {
+    padding: 1rem;
+  }
+}
+
+/* -----------------------------------------------------------------------
+   Inline field validation (ShValidator — assets/js/form-validator.js)
+   Uses Bootstrap's own .is-invalid / .invalid-feedback mechanism, just
+   retinted to the brand red instead of Bootstrap's default danger color
+   so it matches the rest of the CMS.
+   ----------------------------------------------------------------------- */
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: var(--sh-primary);
+}
+.form-control.is-invalid:focus,
+.form-select.is-invalid:focus {
+  border-color: var(--sh-primary);
+  box-shadow: 0 0 0 0.25rem rgba(200, 32, 32, 0.15);
+}
+.invalid-feedback {
+  color: var(--sh-primary);
+  font-weight: 500;
+}
+
+/* Required-field asterisk (*) — brand red, matches the validation color
+   used everywhere else (.invalid-feedback) rather than Bootstrap's
+   default danger red, so the "this is required" signal reads as part of
+   the same visual language as the error state it leads to. */
+.sh-required-mark {
+  color: var(--sh-primary);
+  font-weight: 700;
+}
+
+/* -----------------------------------------------------------------------
+   Live password strength checklist (ShValidator.attachPasswordStrengthMeter)
+   Used by both the Add User password field and the Change Password modal.
+   Neutral/gray until a requirement is met, then flips to green + a filled
+   check — never shown in red, so typing feels encouraging rather than
+   like a wall of errors.
+   ----------------------------------------------------------------------- */
+.sh-password-requirements {
+  margin-top: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  background: var(--sh-gray-50);
+  border: 1px solid var(--sh-gray-200);
+  border-radius: var(--sh-radius-sm);
+}
+.sh-password-requirements__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 420px) {
+  .sh-password-requirements__list {
+    grid-template-columns: 1fr;
+  }
+}
+.sh-password-requirements__item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--sh-gray-600);
+  transition: color 0.15s ease;
+}
+.sh-password-requirements__item i {
+  font-size: 0.9rem;
+  color: var(--sh-gray-300);
+  transition:
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+.sh-password-requirements__item--met {
+  color: #198754;
+}
+.sh-password-requirements__item--met i {
+  color: #198754;
+  transform: scale(1.05);
+}
+
+.sh-password-strength-bar {
+  margin-top: 0.6rem;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--sh-gray-200);
+  overflow: hidden;
+}
+.sh-password-strength-bar__fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  transition:
+    width 0.2s ease,
+    background-color 0.2s ease;
+}
+.sh-password-strength-bar__fill--0 {
+  width: 10%;
+  background: var(--sh-primary);
+}
+.sh-password-strength-bar__fill--1 {
+  width: 25%;
+  background: var(--sh-primary);
+}
+.sh-password-strength-bar__fill--2 {
+  width: 50%;
+  background: var(--sh-gold);
+}
+.sh-password-strength-bar__fill--3 {
+  width: 75%;
+  background: #6ea832;
+}
+.sh-password-strength-bar__fill--4 {
+  width: 100%;
+  background: #198754;
+}
+
+.sh-password-strength-label {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--sh-gray-600);
+}
+
+.modal-content > form {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* -------------------------------------------------------------------------
+   Fare Management — "Two-way route" switch (Add/Edit modal). The route
+   direction is communicated with a compact bidirectional-arrow icon
+   instead of the word "vice-versa" anywhere in the UI.
+   ------------------------------------------------------------------------- */
+.sh-two-way-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.5rem;
+  background: var(--sh-gray-100, #f8f9fa);
+  border: 1px solid var(--sh-gray-200, #e9ecef);
+  border-radius: 0.375rem;
+  padding: 0.75rem 0.9rem;
+}
+
+.sh-two-way-toggle .form-check-input {
+  margin-top: 0.2rem;
+}
+
+.sh-two-way-toggle .form-check-input:checked {
+  background-color: var(--bs-primary, #c82020);
+  border-color: var(--bs-primary, #c82020);
+}
+
+.sh-two-way-toggle .form-check-label {
+  margin-bottom: 0;
+}
+
+.sh-two-way-toggle .text-muted {
+  flex-basis: 100%;
+}
+
+/* Small icon badge that sits beside the checkbox switch, reinforcing the
+   toggle's meaning without relying on text. */
+.sh-two-way-toggle__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  color: var(--sh-teal, #1c6e8c);
+  background: var(--sh-foam, #eaf4f7);
+  font-size: 0.85rem;
+  flex: 0 0 auto;
+}
+
+/* Compact bidirectional-arrow icon used in the fare table and View modal
+   in place of the old "Vice-Versa" text badge. Icon-only, with a native
+   tooltip (title attribute) for accessibility. */
+.sh-two-way-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: 0.4rem;
+  border-radius: 50%;
+  color: var(--sh-teal, #1c6e8c);
+  background: var(--sh-foam, #eaf4f7);
+  font-size: 0.78rem;
+  line-height: 1;
+  vertical-align: middle;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.sh-two-way-icon:hover,
+.sh-two-way-icon:focus-visible {
+  background: var(--sh-teal, #1c6e8c);
+  color: #fff;
+  transform: scale(1.08);
+  outline: none;
+}
+
+.sh-two-way-icon:focus-visible {
+  box-shadow: 0 0 0 0.15rem rgba(28, 110, 140, 0.35);
+}
+
+/* Larger variant for the View modal, where the icon stands alone above
+   the reverse-trip description instead of sitting inline in a table row. */
+.sh-two-way-icon--lg {
+  width: 2.1rem;
+  height: 2.1rem;
+  margin-left: 0;
+  font-size: 1rem;
+}
+
+@media (max-width: 575.98px) {
+  .sh-two-way-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    /* keep touch target comfortable on small screens without growing
+       the visible row height too much */
+  }
+}
+
+/* Tooltip shown on hover (desktop) / focus (keyboard) / tap (touch) for
+   the two-way route icon above. Bootstrap 5.2's Tooltip component reads
+   these custom properties for both the tooltip body AND its arrow, so a
+   single block themes the whole thing consistently for every auto-flip
+   placement Popper chooses. Fade in/out is Bootstrap's built-in `.fade`
+   behavior; we only nudge the duration slightly. */
+.sh-two-way-tooltip {
+  --bs-tooltip-bg: var(--sh-navy-deep, #0a2540);
+  --bs-tooltip-color: #fff;
+  --bs-tooltip-border-radius: var(--sh-radius-sm, 0.5rem);
+  --bs-tooltip-font-size: 0.78rem;
+  --bs-tooltip-padding-x: 0.65rem;
+  --bs-tooltip-padding-y: 0.4rem;
+  --bs-tooltip-max-width: 220px;
+}
+
+.sh-two-way-tooltip .tooltip-inner {
+  font-weight: 600;
+  line-height: 1.4;
+  box-shadow: var(--sh-shadow-sm);
+}
+
+.sh-two-way-tooltip.fade {
+  transition: opacity 0.2s ease;
+}
+
+@media (max-width: 575.98px) {
+  .sh-two-way-tooltip {
+    --bs-tooltip-max-width: min(220px, 70vw);
+    --bs-tooltip-font-size: 0.75rem;
+  }
+}
+
+/* =============================================================================
+   Vessel Features — assignment checklist (Add/Edit Vessel form + read-only
+   View modal) and the Feature Manager modal (master list CRUD + icon
+   picker). Reuses the same tokens as the rest of admin.css
+   (--sh-primary, --sh-gray-*, --sh-radius*, --sh-shadow-sm).
+   ============================================================================= */
+
+.sh-feature-checklist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+.sh-feature-checklist--readonly {
+  padding-top: 0.5rem;
+}
+
+.sh-feature-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.75rem 0.4rem 0.5rem;
+  border: 1px solid var(--sh-gray-300);
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--sh-gray-800);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+  user-select: none;
+}
+
+.sh-feature-chip:hover {
+  border-color: var(--sh-primary);
+}
+
+.sh-feature-chip input[type="checkbox"] {
+  margin: 0;
+  accent-color: var(--sh-primary);
+}
+
+.sh-feature-chip:has(input:checked),
+.sh-feature-chip.is-checked {
+  background: rgba(200, 32, 32, 0.08);
+  border-color: var(--sh-primary);
+  color: var(--sh-primary-dark);
+}
+
+.sh-feature-chip__icon {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: var(--sh-teal);
+}
+
+.sh-feature-chip:has(input:checked) .sh-feature-chip__icon,
+.sh-feature-chip.is-checked .sh-feature-chip__icon {
+  color: var(--sh-primary);
+}
+
+.sh-feature-chip--readonly {
+  cursor: default;
+  background: var(--sh-gray-100);
+  border-color: var(--sh-gray-200);
+}
+.sh-feature-chip--readonly .sh-feature-chip__icon {
+  color: var(--sh-primary);
+}
+
+/* -----------------------------------------------------------------------
+   Feature Manager modal — inline add/edit form + icon picker + list rows
+   ----------------------------------------------------------------------- */
+.sh-icon-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sh-icon-picker .invalid-feedback {
+  flex-basis: 100%;
+  margin-top: 0;
+}
+
+.sh-icon-picker__preview {
+  flex-shrink: 0;
+  width: calc(
+    1.5em + 0.75rem + 2px
+  ); /* matches Bootstrap .form-control height */
+  height: calc(1.5em + 0.75rem + 2px);
+  border-radius: var(--sh-radius-sm);
+  background: var(--sh-gray-100);
+  border: 1px solid var(--sh-gray-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: var(--sh-primary);
+}
+
+.sh-icon-picker__preview.is-invalid-icon {
+  color: var(--sh-gray-600);
+  border-color: #dc3545;
+}
+
+.sh-icon-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.sh-icon-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--sh-radius-sm);
+  border: 1px solid var(--sh-gray-300);
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sh-gray-800);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.sh-icon-swatch:hover {
+  border-color: var(--sh-primary);
+}
+
+.sh-icon-swatch.is-active {
+  background: var(--sh-primary);
+  border-color: var(--sh-primary);
+  color: #fff;
+}
+
+.sh-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.sh-feature-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--sh-gray-200);
+  border-radius: var(--sh-radius-sm);
+  background: var(--sh-gray-50);
+}
+
+.sh-feature-row__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--sh-radius-sm);
+  background: #fff;
+  border: 1px solid var(--sh-gray-200);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sh-primary);
+  flex-shrink: 0;
+}
+
+.sh-feature-row__name {
+  font-weight: 600;
+  color: var(--sh-gray-900);
+}
+
+.sh-feature-row__code {
+  margin-left: auto;
+  font-family: var(--bs-font-monospace, monospace);
+}
+
+/* -----------------------------------------------------------------------
+   Existing-image gallery — drag-to-reorder + set-as-primary, layered on
+   top of the shared .sh-preview-item/.sh-preview-grid rules above.
+   ----------------------------------------------------------------------- */
+.sh-preview-item--existing {
+  cursor: grab;
+}
+
+.sh-preview-item--existing.is-dragging {
+  opacity: 0.4;
+}
+
+.sh-preview-item--existing.is-primary {
+  border-color: var(--sh-primary);
+  box-shadow: 0 0 0 2px rgba(200, 32, 32, 0.25);
+}
+
+.sh-preview-star {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(10, 37, 64, 0.75);
+  color: #ffd166;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.sh-preview-primary-badge {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  right: 4px;
+  background: var(--sh-primary);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: center;
+  border-radius: 999px;
+  padding: 0.1rem 0.3rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.sh-preview-item--existing.is-primary .sh-preview-primary-badge {
+  opacity: 1;
+}
+
+/* -----------------------------------------------------------------------
+   FAQ drag-and-drop reordering (modules/faqs)
+   Scoped entirely to #faqsTable / .sh-faq-row / .sh-drag-handle so this
+   has zero effect on any other module's table.
+   ----------------------------------------------------------------------- */
+#faqsTable .sh-drag-th {
+  width: 40px;
+}
+
+#faqsTable .sh-drag-cell {
+  width: 40px;
+  text-align: center;
+}
+
+#faqsTable .sh-drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--sh-radius-sm);
+  color: var(--sh-gray-600);
+  cursor: grab;
+  /* Stops touchscreens from scrolling the page while a finger is
+     dragging the handle, and stops the row's text from getting
+     selected mid-drag on desktop. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#faqsTable .sh-drag-handle:hover {
+  background: var(--sh-gray-100);
+  color: var(--sh-gray-800);
+}
+
+#faqsTable tr.sh-faq-row--dragging .sh-drag-handle {
+  cursor: grabbing;
+}
+
+#faqsTable .sh-drag-handle.sh-drag-handle--disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Every row transitions on transform so the FLIP animation (JS sets an
+   inline transform then clears it on the next frame) actually animates
+   instead of snapping. */
+#faqsTable tbody tr.sh-faq-row {
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+#faqsTable tbody tr.sh-faq-row--dragging {
+  position: relative;
+  z-index: 2;
+  background: var(--sh-gray-50, #f9fbfe);
+  box-shadow: var(--sh-shadow-md);
+}
+
+#faqsTable tbody tr.sh-faq-row--dragging td {
+  background: transparent;
+}
+
+/* Prevents accidental text selection sitewide while a drag is in
+   progress (a pointer can move faster than the row follows it). */
+body.sh-dragging-active {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* =========================================================================
+   Contact Management (modules/contact)
+   ========================================================================= */
+
+/* -----------------------------------------------------------------------
+   Port drag-and-drop reordering — identical behavior to the FAQ table
+   above, re-scoped to #portsTable so it stays fully independent of the
+   FAQ module (nothing here touches #faqsTable or vice versa).
+   ----------------------------------------------------------------------- */
+#portsTable .sh-drag-th {
+  width: 40px;
+}
+
+#portsTable .sh-drag-cell {
+  width: 40px;
+  text-align: center;
+}
+
+#portsTable .sh-drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--sh-radius-sm);
+  color: var(--sh-gray-600);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#portsTable .sh-drag-handle:hover {
+  background: var(--sh-gray-100);
+  color: var(--sh-gray-800);
+}
+
+#portsTable tr.sh-faq-row--dragging .sh-drag-handle {
+  cursor: grabbing;
+}
+
+#portsTable .sh-drag-handle.sh-drag-handle--disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+#portsTable tbody tr.sh-faq-row {
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+#portsTable tbody tr.sh-faq-row--dragging {
+  position: relative;
+  z-index: 2;
+  background: var(--sh-gray-50, #f9fbfe);
+  box-shadow: var(--sh-shadow-md);
+}
+
+#portsTable tbody tr.sh-faq-row--dragging td {
+  background: transparent;
+}
+
+/* Clickable tel: links inside the ports table — quiet by default, brand
+   red on hover so it reads as interactive without shouting. */
+.sh-tel-link {
+  color: var(--sh-gray-800);
+  white-space: nowrap;
+}
+.sh-tel-link:hover {
+  color: var(--sh-primary);
+}
+
+/* -----------------------------------------------------------------------
+   Repeater rows — used for the Head Office "Mobile / Phone Numbers" and
+   "Email Addresses" lists on the Contact Management settings form. Each
+   row is a value field + status select + remove button; new rows are
+   appended by JS (modules/contact/assets/contact.js).
+   ----------------------------------------------------------------------- */
+.sh-repeater {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.sh-repeater__row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sh-repeater__field {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.sh-repeater__field i {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--sh-gray-600);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.sh-repeater__field .form-control {
+  padding-left: 2.25rem;
+}
+
+.sh-repeater__status {
+  flex: 0 0 140px;
+  width: 140px;
+}
+
+.sh-repeater__remove {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 575.98px) {
+  .sh-repeater__row {
+    flex-wrap: wrap;
+  }
+  .sh-repeater__field {
+    flex: 1 1 100%;
+  }
+  .sh-repeater__status {
+    flex: 1 1 auto;
+    width: auto;
+  }
+}
+
+/* -----------------------------------------------------------------------
+   Google Map live preview — Head Office & Map settings panel.
+   ----------------------------------------------------------------------- */
+.sh-map-preview {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--sh-radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--sh-gray-200);
+  background: var(--sh-gray-100);
+}
+
+.sh-map-preview iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.sh-map-preview__empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--sh-gray-600);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+.sh-map-preview__empty i {
+  font-size: 1.75rem;
+  opacity: 0.6;
+}
+
+/* -----------------------------------------------------------------------
+   Contact Management — responsive refinements (320-414px phones, and
+   comfortable touch targets throughout).
+   ----------------------------------------------------------------------- */
+@media (max-width: 575.98px) {
+  /* The repeater's remove button and status select are already the
+     smallest interactive elements on this screen — keep them at a
+     comfortable 44px tap height even though the row itself is compact,
+     per WCAG 2.5.5. */
+  .sh-repeater__remove {
+    width: 44px;
+    height: 44px;
+  }
+  .sh-repeater__status {
+    min-height: 44px;
+  }
+
+  /* On very narrow phones the map preview's 4:3 box can get taller than
+     it needs to be relative to the form above it; a shorter fixed ratio
+     keeps the whole settings form scannable without excess scrolling. */
+  .sh-map-preview {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+/* Ports table: give the drag handle + edit/delete icon buttons the same
+   comfortable minimum touch size as the rest of the admin on phones,
+   consistent with .sh-two-way-icon's mobile treatment above. */
+@media (max-width: 575.98px) {
+  #portsTable .sh-icon-btn {
+    width: 38px;
+    height: 38px;
+  }
+}

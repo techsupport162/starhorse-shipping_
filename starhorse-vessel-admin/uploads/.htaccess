@@ -1,0 +1,23 @@
+# -----------------------------------------------------------------------
+# uploads/ — user-supplied files are data, never code
+# -----------------------------------------------------------------------
+# Applies to every subfolder (vessels, routes, routes_banner, fares,
+# career, users). Even though uploads are validated and renamed on the way
+# in, this stops anything that ever slips through from being executed or
+# rendered as an active document on this origin.
+
+# Never run scripts from here.
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<FilesMatch "\.(php[0-9]?|phtml|phar|pht|phps|cgi|pl|py|sh|asp|aspx|jsp|html?|shtml|xhtml|js|mjs)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    # Opening an uploaded file (e.g. an admin-uploaded SVG banner) directly
+    # in a tab runs it in a sandbox with no script — <img> embedding on the
+    # public site is unaffected by this header.
+    Header always set Content-Security-Policy "default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; sandbox"
+    Header always set X-Content-Type-Options "nosniff"
+</IfModule>
