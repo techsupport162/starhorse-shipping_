@@ -1,10 +1,9 @@
 # -----------------------------------------------------------------------
 # Site-wide web server hardening (Apache 2.4, mod_php or PHP-FPM)
 # -----------------------------------------------------------------------
-# The landing page's own Content-Security-Policy is sent from index.php
-# (includes/security.php) so it sits next to the markup it describes; the
-# CSP below is only a baseline that also covers the admin panel and every
-# static file. Browsers enforce both policies together.
+# The public site is served from index.html (Vercel/static hosting) or
+# index.php (local XAMPP with database). The CSP below is a baseline that
+# covers the admin panel and every static file.
 #
 # If the site is ever moved to Nginx/IIS, none of this file applies — the
 # same rules must be re-created in that server's own configuration.
@@ -14,8 +13,8 @@
 Options -Indexes -MultiViews
 ServerSignature Off
 
-# Always serve the PHP landing page, never the leftover index.html template.
-DirectoryIndex index.php
+# Serve index.html first; index.php is a fallback for local XAMPP development.
+DirectoryIndex index.html index.php
 
 # ---- Production PHP settings ------------------------------------------
 # Errors are still written to the PHP error log, just never shown to
@@ -33,7 +32,7 @@ DirectoryIndex index.php
 # ---- Block sensitive / non-public files -------------------------------
 # Dotfiles (.htaccess, .user.ini, .gitkeep, .env, .git*), SQL dumps,
 # archives, docs, logs, backups, editor/dev-server config, lock files.
-<FilesMatch "(^\.|\.(sql|zip|tar|gz|7z|rar|md|log|bak|backup|old|orig|save|swp|swo|tmp|ini|env|lock|dist|map)$|~$|^(composer|package|package-lock|fiveserver\.config)\.(json|js)$|^index\.html$)">
+<FilesMatch "(^\.|\.(sql|zip|tar|gz|7z|rar|md|log|bak|backup|old|orig|save|swp|swo|tmp|ini|env|lock|dist|map)$|~$|^(composer|package|package-lock|fiveserver\.config)\.(json|js)$)">
     Require all denied
 </FilesMatch>
 

@@ -1,0 +1,5 @@
+.git
+.vscode
+*.zip
+config/database.local.php
+fiveserver.config.js
