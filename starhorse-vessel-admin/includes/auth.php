@@ -96,5 +96,5 @@ function admin_base_url(): string
     if (preg_match('#(.*/starhorse-vessel-admin)#', $scriptDir, $m)) {
         return $m[1];
     }
-    return '/starhorse-webbb/starhorse-vessel-admin';
+    return '/starhorse-vessel-admin';
 }

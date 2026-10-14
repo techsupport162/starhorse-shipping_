@@ -13,8 +13,8 @@
 Options -Indexes -MultiViews
 ServerSignature Off
 
-# Serve index.html first; index.php is a fallback for local XAMPP development.
-DirectoryIndex index.html index.php
+# Serve index.php first (dynamic CMS site); index.html is fallback.
+DirectoryIndex index.php index.html
 
 # ---- Production PHP settings ------------------------------------------
 # Errors are still written to the PHP error log, just never shown to
