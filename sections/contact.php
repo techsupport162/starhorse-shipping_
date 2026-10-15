@@ -149,19 +149,22 @@ $directionsUrl = $hasOffice
                     <p class="mb-0">Port contact information is currently being updated.</p>
                 </div>
                 <?php else: ?>
-                <div class="sh-port-grid">
-                    <?php foreach ($ports as $port): ?>
-                    <a class="sh-port-card"
-                        href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/', '', $port['phone_number']), ENT_QUOTES, 'UTF-8') ?>">
-                        <span class="sh-port-card__icon"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i></span>
-                        <span class="sh-port-card__body">
-                            <span
-                                class="sh-port-card__name"><?= htmlspecialchars($port['port_name'], ENT_QUOTES, 'UTF-8') ?></span>
-                            <span class="sh-port-card__phone"><i class="bi bi-telephone" aria-hidden="true"></i>
-                                <?= htmlspecialchars($port['phone_number'], ENT_QUOTES, 'UTF-8') ?></span>
-                        </span>
-                    </a>
-                    <?php endforeach; ?>
+                <!-- Wrap the ports grid in a scrollable region to limit vertical height -->
+                <div class="sh-port-scroll" role="region" aria-label="Ports list" tabindex="0" style="max-height:320px; overflow-y:auto; padding-right:8px;">
+                    <div class="sh-port-grid">
+                        <?php foreach ($ports as $port): ?>
+                        <a class="sh-port-card"
+                            href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/', '', $port['phone_number']), ENT_QUOTES, 'UTF-8') ?>">
+                            <span class="sh-port-card__icon"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i></span>
+                            <span class="sh-port-card__body">
+                                <span
+                                    class="sh-port-card__name"><?= htmlspecialchars($port['port_name'], ENT_QUOTES, 'UTF-8') ?></span>
+                                <span class="sh-port-card__phone"><i class="bi bi-telephone" aria-hidden="true"></i>
+                                    <?= htmlspecialchars($port['phone_number'], ENT_QUOTES, 'UTF-8') ?></span>
+                            </span>
+                        </a>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
                 <?php endif; ?>
             </div>
