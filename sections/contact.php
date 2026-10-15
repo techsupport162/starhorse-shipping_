@@ -149,16 +149,14 @@ $directionsUrl = $hasOffice
                     <p class="mb-0">Port contact information is currently being updated.</p>
                 </div>
                 <?php else: ?>
-                <!-- Wrap the ports grid in a scrollable region to limit vertical height -->
-                <div class="sh-port-scroll" role="region" aria-label="Ports list" tabindex="0" style="max-height: min(320px, 50vh); overflow-y:auto; -webkit-overflow-scrolling:touch; padding-right:8px;">
+                <div id="sh-port-scroll" class="sh-port-scroll" role="region" aria-label="Ports list" tabindex="0" style="overflow-y:auto; -webkit-overflow-scrolling:touch; padding-right:8px; max-height: min(320px, 50vh);">
                     <div class="sh-port-grid">
                         <?php foreach ($ports as $port): ?>
                         <a class="sh-port-card"
                             href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/', '', $port['phone_number']), ENT_QUOTES, 'UTF-8') ?>">
                             <span class="sh-port-card__icon"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i></span>
                             <span class="sh-port-card__body">
-                                <span
-                                    class="sh-port-card__name"><?= htmlspecialchars($port['port_name'], ENT_QUOTES, 'UTF-8') ?></span>
+                                <span class="sh-port-card__name"><?= htmlspecialchars($port['port_name'], ENT_QUOTES, 'UTF-8') ?></span>
                                 <span class="sh-port-card__phone"><i class="bi bi-telephone" aria-hidden="true"></i>
                                     <?= htmlspecialchars($port['phone_number'], ENT_QUOTES, 'UTF-8') ?></span>
                             </span>
@@ -166,6 +164,43 @@ $directionsUrl = $hasOffice
                         <?php endforeach; ?>
                     </div>
                 </div>
+
+                <script>
+                (function() {
+                    function applyPortLimit() {
+                        var container = document.getElementById('sh-port-scroll');
+                        if (!container) return;
+
+                        var isMobile = window.matchMedia('(max-width: 767.98px)').matches;
+                        if (!isMobile) {
+                            container.style.maxHeight = 'min(320px, 50vh)';
+                            return;
+                        }
+
+                        var grid = container.querySelector('.sh-port-grid');
+                        if (!grid) return;
+
+                        var firstCard = grid.querySelector('.sh-port-card');
+                        if (!firstCard) return;
+
+                        var cardStyle = window.getComputedStyle(firstCard);
+                        var marginTop = parseFloat(cardStyle.marginTop) || 0;
+                        var marginBottom = parseFloat(cardStyle.marginBottom) || 0;
+                        var cardHeight = firstCard.getBoundingClientRect().height + marginTop + marginBottom;
+                        var visiblePortCount = 5;
+
+                        container.style.maxHeight = Math.ceil(cardHeight * visiblePortCount) + 'px';
+                    }
+
+                    if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', applyPortLimit);
+                    } else {
+                        applyPortLimit();
+                    }
+
+                    window.addEventListener('resize', applyPortLimit);
+                })();
+                </script>
                 <?php endif; ?>
             </div>
         </div>
