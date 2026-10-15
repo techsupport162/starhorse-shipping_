@@ -41,7 +41,7 @@ $careerPostingsForJs = array_map(function ($p) use ($careerImageBase) {
         'responsibilities'          => $p['responsibilities'],
         'application_instructions' => $p['application_instructions'],
         'contact_email'             => $p['contact_email'],
-        'image_url'                 => $p['recruitment_image'] ? $careerImageBase . rawurlencode($p['recruitment_image']) : null,
+        'image_url'                 => image_asset_url($p['recruitment_image'], $careerImageBase),
     ];
 }, $careerPostings);
 ?>
@@ -70,8 +70,9 @@ $careerPostingsForJs = array_map(function ($p) use ($careerImageBase) {
                 $postingId = (int) $posting['id'];
                 $postingTitle = htmlspecialchars($posting['title'], ENT_QUOTES, 'UTF-8');
                 $positionName = htmlspecialchars($posting['position_name'], ENT_QUOTES, 'UTF-8');
-                $imageUrl = $posting['recruitment_image']
-                    ? htmlspecialchars($careerImageBase . rawurlencode($posting['recruitment_image']), ENT_QUOTES, 'UTF-8')
+                $imageAssetUrl = image_asset_url($posting['recruitment_image'], $careerImageBase);
+                $imageUrl = $imageAssetUrl !== null
+                    ? htmlspecialchars($imageAssetUrl, ENT_QUOTES, 'UTF-8')
                     : null;
             ?>
             <div class="col-md-6 col-lg-4">
@@ -171,7 +172,8 @@ $careerPostingsForJs = array_map(function ($p) use ($careerImageBase) {
                         </div>
                         <div class="sh-career-detail__info">
                             <span class="sh-career-card__badge">Apply Now</span>
-                            <h3 class="sh-career-detail__title mb-1" id="careerApplyModalLabel">Submit Your Application</h3>
+                            <h3 class="sh-career-detail__title mb-1" id="careerApplyModalLabel">Submit Your Application
+                            </h3>
                             <p class="text-muted mb-4">
                                 Applying for: <strong class="text-body" id="careerApplyPositionLabel">&mdash;</strong>
                             </p>
@@ -187,8 +189,8 @@ $careerPostingsForJs = array_map(function ($p) use ($careerImageBase) {
                                 <div class="row g-3 mb-3">
                                     <div class="col-12">
                                         <label for="careerApplyFullName" class="form-label">Full Name *</label>
-                                        <input type="text" class="form-control" id="careerApplyFullName" name="full_name"
-                                            maxlength="150" required>
+                                        <input type="text" class="form-control" id="careerApplyFullName"
+                                            name="full_name" maxlength="150" required>
                                         <div class="invalid-feedback"></div>
                                     </div>
 
@@ -200,7 +202,8 @@ $careerPostingsForJs = array_map(function ($p) use ($careerImageBase) {
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="careerApplyContactNumber" class="form-label">Contact Number *</label>
+                                        <label for="careerApplyContactNumber" class="form-label">Contact Number
+                                            *</label>
                                         <input type="tel" class="form-control" id="careerApplyContactNumber"
                                             name="contact_number" maxlength="30" required>
                                         <div class="invalid-feedback"></div>
@@ -214,15 +217,18 @@ $careerPostingsForJs = array_map(function ($p) use ($careerImageBase) {
                                     </div>
 
                                     <div class="col-12">
-                                        <label for="careerApplyMessage" class="form-label">Message / Cover Letter</label>
+                                        <label for="careerApplyMessage" class="form-label">Message / Cover
+                                            Letter</label>
                                         <textarea class="form-control" id="careerApplyMessage" name="message" rows="3"
-                                            maxlength="5000" placeholder="Tell us why you'd be a great fit..."></textarea>
+                                            maxlength="5000"
+                                            placeholder="Tell us why you'd be a great fit..."></textarea>
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
 
                                 <div class="mb-1">
-                                    <label class="form-label d-block">Resume / CV <span class="text-muted small">(PDF, DOC,
+                                    <label class="form-label d-block">Resume / CV <span class="text-muted small">(PDF,
+                                            DOC,
                                             or DOCX &middot; up to 5MB &middot; optional)</span></label>
                                     <div class="sh-career-resume-drop" id="careerResumeDrop" role="button" tabindex="0"
                                         aria-label="Upload resume — drag and drop a file here, or press Enter to browse">
@@ -230,7 +236,8 @@ $careerPostingsForJs = array_map(function ($p) use ($careerImageBase) {
                                         <div class="small">Drag &amp; drop your resume here, or click to browse</div>
                                         <div class="sh-career-resume-selected d-none" id="careerResumeSelected"></div>
                                     </div>
-                                    <input type="file" id="careerResumeInput" name="resume" accept=".pdf,.doc,.docx" hidden>
+                                    <input type="file" id="careerResumeInput" name="resume" accept=".pdf,.doc,.docx"
+                                        hidden>
                                     <div class="invalid-feedback d-block" id="careerResumeError"></div>
                                 </div>
                             </div>
@@ -241,7 +248,8 @@ $careerPostingsForJs = array_map(function ($p) use ($careerImageBase) {
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary" id="careerApplySubmitBtn">
                         <span>Submit Application</span>
-                        <span class="spinner-border spinner-border-sm ms-1 d-none" id="careerApplySpinner" aria-hidden="true"></span>
+                        <span class="spinner-border spinner-border-sm ms-1 d-none" id="careerApplySpinner"
+                            aria-hidden="true"></span>
                     </button>
                 </div>
             </form>

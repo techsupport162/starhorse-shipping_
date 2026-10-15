@@ -26,7 +26,7 @@ $$;
 -- ============================================================
 CREATE TABLE IF NOT EXISTS users (
   id              SERIAL        PRIMARY KEY,
-  profile_image   VARCHAR(255)  DEFAULT NULL,
+  profile_image   TEXT          DEFAULT NULL,
   username        VARCHAR(50)   NOT NULL,
   password        VARCHAR(255)  NOT NULL,
   full_name       VARCHAR(100)  NOT NULL DEFAULT '',
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS vessel_images (
   id          SERIAL       PRIMARY KEY,
   vessel_id   INTEGER      NOT NULL
                 REFERENCES vessels (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  image       VARCHAR(255) NOT NULL,
+  image       TEXT         NOT NULL,
   sort_order  INTEGER      NOT NULL DEFAULT 0,
   created_at  TIMESTAMP    NOT NULL DEFAULT NOW()
 );
@@ -142,8 +142,8 @@ CREATE TABLE IF NOT EXISTS fares (
   id                   SERIAL       PRIMARY KEY,
   origin               VARCHAR(100) NOT NULL,
   destination          VARCHAR(100) NOT NULL,
-  passenger_fare_image VARCHAR(255) DEFAULT NULL,
-  cargo_fare_image     VARCHAR(255) DEFAULT NULL,
+  passenger_fare_image TEXT DEFAULT NULL,
+  cargo_fare_image     TEXT DEFAULT NULL,
   is_vice_versa        SMALLINT     NOT NULL DEFAULT 0,
   status               VARCHAR(20)  NOT NULL DEFAULT 'published'
                          CHECK (status IN ('published','draft')),
@@ -180,7 +180,7 @@ CREATE OR REPLACE TRIGGER trg_faqs_updated_at
 -- ============================================================
 CREATE TABLE IF NOT EXISTS route_banner (
   id           SMALLINT     NOT NULL DEFAULT 1 PRIMARY KEY,
-  banner_image VARCHAR(255) DEFAULT NULL,
+  banner_image TEXT DEFAULT NULL,
   updated_at   TIMESTAMP    NOT NULL DEFAULT NOW()
 );
 CREATE OR REPLACE TRIGGER trg_route_banner_updated_at
@@ -195,7 +195,7 @@ INSERT INTO route_banner (id) VALUES (1) ON CONFLICT (id) DO NOTHING;
 CREATE TABLE IF NOT EXISTS route_destinations (
   id                 SERIAL       PRIMARY KEY,
   location_name      VARCHAR(150) NOT NULL,
-  destination_image  VARCHAR(255) DEFAULT NULL,
+  destination_image  TEXT         DEFAULT NULL,
   status             VARCHAR(20)  NOT NULL DEFAULT 'published'
                        CHECK (status IN ('published','draft')),
   sort_order         INTEGER      NOT NULL DEFAULT 0,
@@ -313,7 +313,7 @@ CREATE TABLE IF NOT EXISTS career_postings (
   responsibilities         TEXT         DEFAULT NULL,
   application_instructions TEXT         DEFAULT NULL,
   contact_email            VARCHAR(150) DEFAULT NULL,
-  recruitment_image        VARCHAR(255) DEFAULT NULL,
+  recruitment_image        TEXT         DEFAULT NULL,
   status                   VARCHAR(20)  NOT NULL DEFAULT 'draft'
                              CHECK (status IN ('published','draft')),
   sort_order               INTEGER      NOT NULL DEFAULT 0,

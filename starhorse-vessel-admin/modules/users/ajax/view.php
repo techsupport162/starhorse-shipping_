@@ -19,6 +19,6 @@ if (!$user) {
 }
 
 $base = admin_base_url();
-$user['profile_image_url'] = $user['profile_image'] ? $base . '/uploads/users/' . rawurlencode($user['profile_image']) : null;
+$user['profile_image_url'] = image_asset_url($user['profile_image'], $base . '/uploads/users/');
 
 json_response(['success' => true, 'data' => $user]);

@@ -19,7 +19,7 @@ $rows = array_map(function ($d) use ($base) {
         'status'            => $d['status'],
         'sort_order'        => (int) $d['sort_order'],
         'destination_image' => $d['destination_image'],
-        'image_url'         => $d['destination_image'] ? $base . '/uploads/routes/' . rawurlencode($d['destination_image']) : null,
+        'image_url'         => image_asset_url($d['destination_image'], $base . '/uploads/routes/'),
         'created_at'        => $d['created_at'],
         'updated_at'        => $d['updated_at'],
     ];

@@ -66,7 +66,7 @@ try {
     json_response([
         'success' => true,
         'message' => 'Banner image updated successfully.',
-        'image_url' => admin_base_url() . '/uploads/routes_banner/' . rawurlencode($filename),
+        'image_url' => image_asset_url($filename, admin_base_url() . '/uploads/routes_banner/'),
     ]);
 } catch (Throwable $e) {
     error_log('[Routes banner update] ' . $e->getMessage());

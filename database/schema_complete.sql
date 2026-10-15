@@ -22,7 +22,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- =============================================================================
 CREATE TABLE IF NOT EXISTS `users` (
   `id`             INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-  `profile_image`  VARCHAR(255)  NULL     DEFAULT NULL,
+  `profile_image`  TEXT          NULL     DEFAULT NULL,
   `username`       VARCHAR(50)   NOT NULL,
   `password`       VARCHAR(255)  NOT NULL,
   `full_name`      VARCHAR(100)  NOT NULL DEFAULT '',
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `vessels` (
 CREATE TABLE IF NOT EXISTS `vessel_images` (
   `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `vessel_id`   INT UNSIGNED NOT NULL,
-  `image`       VARCHAR(255) NOT NULL,
+  `image`       TEXT         NOT NULL,
   `sort_order`  INT UNSIGNED NOT NULL DEFAULT 0,
   `created_at`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -132,8 +132,8 @@ CREATE TABLE IF NOT EXISTS `fares` (
   `id`                   INT UNSIGNED  NOT NULL AUTO_INCREMENT,
   `origin`               VARCHAR(100)  NOT NULL,
   `destination`          VARCHAR(100)  NOT NULL,
-  `passenger_fare_image` VARCHAR(255)  NULL DEFAULT NULL,
-  `cargo_fare_image`     VARCHAR(255)  NULL DEFAULT NULL,
+  `passenger_fare_image` TEXT          NULL DEFAULT NULL,
+  `cargo_fare_image`     TEXT          NULL DEFAULT NULL,
   `is_vice_versa`        TINYINT(1)    NOT NULL DEFAULT 0,
   `status`               ENUM('published','draft') NOT NULL DEFAULT 'published',
   `sort_order`           INT UNSIGNED  NOT NULL DEFAULT 0,
@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `faqs` (
 -- =============================================================================
 CREATE TABLE IF NOT EXISTS `route_banner` (
   `id`           TINYINT UNSIGNED NOT NULL DEFAULT 1,
-  `banner_image` VARCHAR(255)     NULL DEFAULT NULL,
+  `banner_image` TEXT             NULL DEFAULT NULL,
   `updated_at`   DATETIME         NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -178,7 +178,7 @@ INSERT INTO `route_banner` (`id`) VALUES (1)
 CREATE TABLE IF NOT EXISTS `route_destinations` (
   `id`                INT UNSIGNED  NOT NULL AUTO_INCREMENT,
   `location_name`     VARCHAR(150)  NOT NULL,
-  `destination_image` VARCHAR(255)  NULL DEFAULT NULL,
+  `destination_image` TEXT          NULL DEFAULT NULL,
   `status`            ENUM('published','draft') NOT NULL DEFAULT 'published',
   `sort_order`        INT UNSIGNED  NOT NULL DEFAULT 0,
   `created_at`        DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -279,7 +279,7 @@ CREATE TABLE IF NOT EXISTS `career_postings` (
   `responsibilities`         TEXT          NULL DEFAULT NULL,
   `application_instructions` TEXT          NULL DEFAULT NULL,
   `contact_email`            VARCHAR(150)  NULL DEFAULT NULL,
-  `recruitment_image`        VARCHAR(255)  NULL DEFAULT NULL,
+  `recruitment_image`        TEXT          NULL DEFAULT NULL,
   `status`                   ENUM('published','draft') NOT NULL DEFAULT 'draft',
   `sort_order`               INT UNSIGNED  NOT NULL DEFAULT 0,
   `created_at`               DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,

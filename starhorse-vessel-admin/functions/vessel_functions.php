@@ -255,13 +255,10 @@ function delete_vessel_image(int $imageId): bool
     return true;
 }
 
-/** Remove an image file from uploads/vessels/ if it exists. */
+/** Remove a Cloudinary vessel image or a legacy local image file. */
 function delete_image_file(string $filename): void
 {
-    $path = __DIR__ . '/../uploads/vessels/' . basename($filename);
-    if (is_file($path)) {
-        @unlink($path);
-    }
+    delete_uploaded_image_file($filename, 'vessels');
 }
 
 /** Simple dashboard stat: total vessel count. */

@@ -23,7 +23,7 @@ $base = admin_base_url();
 $vessel['images'] = array_map(function ($img) use ($base) {
     return [
         'id'  => (int) $img['id'],
-        'url' => $base . '/uploads/vessels/' . rawurlencode($img['image']),
+        'url' => image_asset_url($img['image'], $base . '/uploads/vessels/'),
     ];
 }, $vessel['images']);
 

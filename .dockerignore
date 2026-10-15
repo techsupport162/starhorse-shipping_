@@ -1,7 +1,9 @@
 .env
+.env.*
 .git
 .vscode
 *.zip
 config/database.local.php
+vendor/
 fiveserver.config.js
 assets/vid/*.mp4

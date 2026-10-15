@@ -21,7 +21,7 @@ $rows = array_map(function ($v) use ($base) {
         'depth_m'       => $v['depth_m'],
         'gross_tonnage' => $v['gross_tonnage'],
         'status'        => $v['status'],
-        'thumbnail_url' => $v['thumbnail'] ? $base . '/uploads/vessels/' . rawurlencode($v['thumbnail']) : null,
+        'thumbnail_url' => image_asset_url($v['thumbnail'], $base . '/uploads/vessels/'),
     ];
 }, $result['rows']);
 

@@ -21,8 +21,8 @@ $rows = array_map(function ($f) use ($base) {
         'is_vice_versa'          => (bool) $f['is_vice_versa'],
         'passenger_fare_image'   => $f['passenger_fare_image'],
         'cargo_fare_image'       => $f['cargo_fare_image'],
-        'passenger_fare_url'     => $f['passenger_fare_image'] ? $base . '/uploads/fares/' . rawurlencode($f['passenger_fare_image']) : null,
-        'cargo_fare_url'         => $f['cargo_fare_image'] ? $base . '/uploads/fares/' . rawurlencode($f['cargo_fare_image']) : null,
+        'passenger_fare_url'     => image_asset_url($f['passenger_fare_image'], $base . '/uploads/fares/'),
+        'cargo_fare_url'         => image_asset_url($f['cargo_fare_image'], $base . '/uploads/fares/'),
         'created_at'             => $f['created_at'],
         'updated_at'             => $f['updated_at'],
     ];

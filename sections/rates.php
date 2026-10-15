@@ -5,6 +5,7 @@
 // should be hard-coded here — same convention as sections/vessels.php.
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../starhorse-vessel-admin/functions/helpers.php';
 require_once __DIR__ . '/../starhorse-vessel-admin/functions/fare_functions.php';
 
 $fares = get_published_fares();
@@ -40,8 +41,8 @@ $faresForJs = array_map(function ($fare) use ($fareImageBase) {
     return [
         'origin'        => $fare['origin'],
         'destination'   => $fare['destination'],
-        'passenger'     => $fare['passenger_fare_image'] ? $fareImageBase . rawurlencode($fare['passenger_fare_image']) : null,
-        'cargo'         => $fare['cargo_fare_image'] ? $fareImageBase . rawurlencode($fare['cargo_fare_image']) : null,
+        'passenger'     => image_asset_url($fare['passenger_fare_image'], $fareImageBase),
+        'cargo'         => image_asset_url($fare['cargo_fare_image'], $fareImageBase),
         'is_vice_versa' => !empty($fare['is_vice_versa']),
     ];
 }, $fares);

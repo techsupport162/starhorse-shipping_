@@ -5,6 +5,7 @@
 // vessel info should be hard-coded here.
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../starhorse-vessel-admin/functions/helpers.php';
 require_once __DIR__ . '/../starhorse-vessel-admin/functions/vessel_functions.php';
 
 $vessels = get_published_vessels();
@@ -61,7 +62,8 @@ function sh_vessel_spec_rows(array $vessel): array
                         <div class="sh-vc-slide__grid">
 
                             <div class="sh-vc-info">
-                                <p class="sh-vc-info__eyebrow"><i class="bi bi-water" aria-hidden="true"></i><?= $vesselTagline ?></p>
+                                <p class="sh-vc-info__eyebrow"><i class="bi bi-water"
+                                        aria-hidden="true"></i><?= $vesselTagline ?></p>
                                 <h3 class="sh-vc-info__name"><?= $vesselName ?></h3>
 
                                 <?php if (!empty($specs)): ?>
@@ -108,7 +110,7 @@ function sh_vessel_spec_rows(array $vessel): array
                                     aria-label="<?= $vesselName ?> photo, <?= count($images) ?> total. Use left and right arrow keys or swipe to browse."
                                     <?php endif; ?>>
                                     <?php if (!empty($images)): ?>
-                                    <img src="<?= htmlspecialchars($vesselImageBase . $images[0], ENT_QUOTES, 'UTF-8') ?>"
+                                    <img src="<?= htmlspecialchars(image_asset_url($images[0], $vesselImageBase), ENT_QUOTES, 'UTF-8') ?>"
                                         alt="<?= $vesselName ?>" class="sh-vc-gallery__main-img" data-main-image
                                         loading="<?= $isFirst ? 'eager' : 'lazy' ?>" decoding="async"
                                         <?= $isFirst ? 'fetchpriority="high"' : 'fetchpriority="low"' ?>>
@@ -125,7 +127,7 @@ function sh_vessel_spec_rows(array $vessel): array
                                     <div class="sh-vc-thumbs" role="tablist" aria-label="<?= $vesselName ?> photos"
                                         data-thumbs-track>
                                         <?php foreach ($images as $imgIndex => $img):
-                                            $imgUrl = htmlspecialchars($vesselImageBase . $img, ENT_QUOTES, 'UTF-8');
+                                            $imgUrl = htmlspecialchars(image_asset_url($img, $vesselImageBase), ENT_QUOTES, 'UTF-8');
                                         ?>
                                         <button type="button"
                                             class="sh-vc-thumb<?= $imgIndex === 0 ? ' is-active' : '' ?>"

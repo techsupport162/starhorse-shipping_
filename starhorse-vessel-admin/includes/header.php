@@ -14,10 +14,11 @@ if (!isset($pageTitle)) {
 }
 $activeNav = $activeNav ?? '';
 $base = admin_base_url();
+require_once __DIR__ . '/../functions/helpers.php';
 $adminName = $_SESSION['admin_name'] ?? 'Admin';
 $adminRole = $_SESSION['admin_role'] ?? 'administrator';
 $adminAvatar = $_SESSION['admin_avatar'] ?? null;
-$adminAvatarUrl = $adminAvatar ? $base . '/uploads/users/' . rawurlencode($adminAvatar) : null;
+$adminAvatarUrl = image_asset_url($adminAvatar, $base . '/uploads/users/');
 $flash = get_flash();
 ?>
 <!doctype html>

@@ -25,8 +25,8 @@ just import `schema.sql` directly and can ignore this.
 ## 2. Database setup
 
 1. Start Apache + MySQL in the XAMPP control panel.
-2. Open **phpMyAdmin** → *Import* → choose `database/schema.sql` (at the project
-   root, `starhorse-webbb/database/schema.sql`) → *Go*.
+2. Open **phpMyAdmin** → _Import_ → choose `database/schema.sql` (at the project
+   root, `starhorse-webbb/database/schema.sql`) → _Go_.
    - This creates the `starhorse_cms` database with `users`, `vessels`,
      and `vessel_images` tables, one default administrator account, and one
      sample vessel record.
@@ -79,7 +79,7 @@ under `modules/users/ajax/` also checks this server-side).
   Password** modal (key icon).
 - The status toggle icon activates/deactivates an account inline (with a
   confirmation prompt) — deactivated accounts can't log in and see:
-  *"This account has been deactivated. Please contact the administrator."*
+  _"This account has been deactivated. Please contact the administrator."_
 - **Delete** (trash icon) opens a confirmation modal.
 - Safety rails: you can't deactivate or delete your own logged-in account,
   and the system always keeps at least one active Administrator — the last
@@ -89,12 +89,12 @@ under `modules/users/ajax/` also checks this server-side).
 
 ### Roles
 
-| | Administrator | User |
-|---|---|---|
-| Dashboard | ✅ | ✅ |
-| Vessel Management | ✅ | ✅ |
-| User Management | ✅ | ❌ (hidden + 403 on direct URL) |
-| Future modules / Settings | ✅ | ❌ |
+|                           | Administrator | User                            |
+| ------------------------- | ------------- | ------------------------------- |
+| Dashboard                 | ✅            | ✅                              |
+| Vessel Management         | ✅            | ✅                              |
+| User Management           | ✅            | ❌ (hidden + 403 on direct URL) |
+| Future modules / Settings | ✅            | ❌                              |
 
 ## 6. Using the Vessel module
 
@@ -150,8 +150,9 @@ starhorse-webbb/
 - User Management endpoints additionally require Administrator access
   server-side (`require_admin()`), independent of what the sidebar shows.
 - Uploaded images are validated by real MIME type + `getimagesize()` (not the
-  client-supplied filename/type), capped at 5MB, and stored under a random
-  filename — the original filename is never trusted or executed.
+  client-supplied filename/type), then sent server-side to Cloudinary with a
+  random public ID. The database stores the returned HTTPS URL; original
+  filenames are never used as asset IDs. Resume documents remain local.
 - Passwords are hashed with bcrypt (`password_hash` / `password_verify`);
   the minimum password length is 8 characters.
 - Login blocks accounts with `status = 'inactive'` with a clear message.
@@ -170,3 +171,18 @@ Follow the Vessels or Users module as a template:
    flag once it's live. Wrap it in `if (is_admin())` if it should be
    Administrator-only, and call `require_admin()` (instead of just
    `require_login()`) at the top of every page/endpoint in that module.
+
+## Cloudinary image storage
+
+- Set `CLOUDINARY_URL` in the server environment (or the ignored local
+  `.env` file) using Cloudinary's API environment variable format:
+  `cloudinary://<api_key>:<api_secret>@<cloud_name>`. Never commit this value.
+- Run `composer install` for local PHP development. The Docker image installs
+  locked dependencies during its build.
+- On an existing PostgreSQL database, run
+  `database/migration_005_cloudinary_image_urls.sql` once before deploying.
+  Fresh PostgreSQL and complete-schema installs already use `TEXT` image fields.
+- New image uploads are stored in Cloudinary and their HTTPS delivery URLs are
+  saved in the existing image columns. Existing local filenames continue to
+  render and can be removed normally; replacing them from the admin panel moves
+  each asset to Cloudinary. Resume documents remain local and private.

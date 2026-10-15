@@ -10,11 +10,14 @@ RUN a2enmod rewrite headers && \
 # Allow .htaccess to override Apache config
 RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 
+# Install Composer dependencies in the image; .env is excluded from the build context.
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 # Copy all project files into the web root
 COPY . /var/www/html/
 
-# The uploads directory must be writable by Apache (www-data)
-RUN chown -R www-data:www-data /var/www/html/starhorse-vessel-admin/uploads \
+RUN composer install --working-dir=/var/www/html --no-dev --prefer-dist --no-interaction --classmap-authoritative \
+    && chown -R www-data:www-data /var/www/html/starhorse-vessel-admin/uploads \
     && chmod -R 755 /var/www/html/starhorse-vessel-admin/uploads
 
 EXPOSE 80

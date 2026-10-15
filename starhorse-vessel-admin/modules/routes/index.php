@@ -23,9 +23,7 @@ $activeNav = 'routes';
 $extraScripts = [admin_base_url() . '/modules/routes/assets/routes.js'];
 
 $banner = get_route_banner_row();
-$bannerUrl = $banner['banner_image']
-    ? admin_base_url() . '/uploads/routes_banner/' . rawurlencode($banner['banner_image'])
-    : null;
+$bannerUrl = image_asset_url($banner['banner_image'], admin_base_url() . '/uploads/routes_banner/');
 
 require __DIR__ . '/../../includes/header.php';
 ?>

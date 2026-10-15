@@ -23,9 +23,7 @@ $rows = array_map(function ($p) use ($base) {
         'position_is_active'     => (bool) $p['position_is_active'],
         'applicant_count'        => (int) $p['applicant_count'],
         'recruitment_image'      => $p['recruitment_image'],
-        'recruitment_image_url'  => $p['recruitment_image']
-            ? $base . '/uploads/career/' . rawurlencode($p['recruitment_image'])
-            : null,
+        'recruitment_image_url'  => image_asset_url($p['recruitment_image'], $base . '/uploads/career/'),
         'created_at'             => $p['created_at'],
         'updated_at'             => $p['updated_at'],
     ];

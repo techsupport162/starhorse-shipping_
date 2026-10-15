@@ -14,7 +14,7 @@ $base = admin_base_url();
 $rows = array_map(function ($u) use ($base) {
     return [
         'id'                => (int) $u['id'],
-        'profile_image_url' => $u['profile_image'] ? $base . '/uploads/users/' . rawurlencode($u['profile_image']) : null,
+        'profile_image_url' => image_asset_url($u['profile_image'], $base . '/uploads/users/'),
         'username'          => $u['username'],
         'full_name'         => $u['full_name'],
         'email'             => $u['email'],

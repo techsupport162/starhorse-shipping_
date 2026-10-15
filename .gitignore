@@ -5,6 +5,7 @@ config/database.local.php
 # ---- Dev tools ----
 .vscode/
 fiveserver.config.js
+vendor/
 
 # ---- Build artifacts / OS ----
 *.zip

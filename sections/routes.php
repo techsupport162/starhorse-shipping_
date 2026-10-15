@@ -6,6 +6,7 @@
 // No port or banner should be hard-coded here.
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../starhorse-vessel-admin/functions/helpers.php';
 require_once __DIR__ . '/../starhorse-vessel-admin/functions/routes_functions.php';
 
 if (!function_exists('sh_route_banner_natural_dimensions')) {
@@ -71,8 +72,9 @@ $destinationImageBase = 'starhorse-vessel-admin/uploads/routes/';
 $destinationCount = count($destinations);
 
 $bannerFilename = get_route_banner();
-$bannerUrl = $bannerFilename ? 'starhorse-vessel-admin/uploads/routes_banner/' . $bannerFilename : null;
-$bannerDimensions = $bannerFilename
+$bannerBaseUrl = 'starhorse-vessel-admin/uploads/routes_banner/';
+$bannerUrl = image_asset_url($bannerFilename, $bannerBaseUrl);
+$bannerDimensions = $bannerFilename && $bannerUrl !== $bannerFilename
     ? sh_route_banner_natural_dimensions(__DIR__ . '/../starhorse-vessel-admin/uploads/routes_banner/' . $bannerFilename)
     : null;
 
@@ -133,13 +135,14 @@ $marqueeRepeats = $destinationCount > 0 ? (int) ceil($marqueeMinItems / $destina
                 <ul class="port-marquee__group">
                     <?php for ($repeat = 0; $repeat < $marqueeRepeats; $repeat++): ?>
                     <?php foreach ($destinations as $destination):
-                        $logoUrl = $destinationImageBase . $destination['destination_image'];
+                        $logoUrl = image_asset_url($destination['destination_image'], $destinationImageBase);
                     ?>
                     <li class="port-logo<?= $repeat > 0 ? ' is-repeat' : '' ?>">
                         <span class="port-logo__mark">
                             <img src="<?= htmlspecialchars($logoUrl, ENT_QUOTES, 'UTF-8') ?>" alt="" decoding="async">
                         </span>
-                        <span class="port-logo__name"><?= htmlspecialchars($destination['location_name'], ENT_QUOTES, 'UTF-8') ?></span>
+                        <span
+                            class="port-logo__name"><?= htmlspecialchars($destination['location_name'], ENT_QUOTES, 'UTF-8') ?></span>
                     </li>
                     <?php endforeach; ?>
                     <?php endfor; ?>

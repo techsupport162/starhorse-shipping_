@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `vessels` (
 CREATE TABLE IF NOT EXISTS `vessel_images` (
   `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `vessel_id`   INT UNSIGNED NOT NULL,
-  `image`       VARCHAR(255) NOT NULL,
+  `image`       TEXT         NOT NULL,
   `sort_order`  INT UNSIGNED NOT NULL DEFAULT 0,
   `created_at`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),

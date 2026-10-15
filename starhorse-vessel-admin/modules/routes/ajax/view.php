@@ -20,8 +20,6 @@ if (!$destination) {
 }
 
 $base = admin_base_url();
-$destination['image_url'] = $destination['destination_image']
-    ? $base . '/uploads/routes/' . rawurlencode($destination['destination_image'])
-    : null;
+$destination['image_url'] = image_asset_url($destination['destination_image'], $base . '/uploads/routes/');
 
 json_response(['success' => true, 'data' => $destination]);

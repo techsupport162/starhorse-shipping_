@@ -23,11 +23,7 @@ $fare['is_vice_versa'] = (bool) $fare['is_vice_versa'];
 
 $base = admin_base_url();
 
-$fare['passenger_fare_url'] = $fare['passenger_fare_image']
-    ? $base . '/uploads/fares/' . rawurlencode($fare['passenger_fare_image'])
-    : null;
-$fare['cargo_fare_url'] = $fare['cargo_fare_image']
-    ? $base . '/uploads/fares/' . rawurlencode($fare['cargo_fare_image'])
-    : null;
+$fare['passenger_fare_url'] = image_asset_url($fare['passenger_fare_image'], $base . '/uploads/fares/');
+$fare['cargo_fare_url'] = image_asset_url($fare['cargo_fare_image'], $base . '/uploads/fares/');
 
 json_response(['success' => true, 'data' => $fare]);

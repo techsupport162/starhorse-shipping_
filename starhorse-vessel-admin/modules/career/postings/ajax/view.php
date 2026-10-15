@@ -36,9 +36,7 @@ json_response([
         'application_instructions' => $posting['application_instructions'],
         'contact_email'             => $posting['contact_email'],
         'recruitment_image'         => $posting['recruitment_image'],
-        'recruitment_image_url'     => $posting['recruitment_image']
-            ? $base . '/uploads/career/' . rawurlencode($posting['recruitment_image'])
-            : null,
+        'recruitment_image_url'     => image_asset_url($posting['recruitment_image'], $base . '/uploads/career/'),
         'status'                    => $posting['status'],
         'created_at'                => $posting['created_at'],
         'updated_at'                => $posting['updated_at'],

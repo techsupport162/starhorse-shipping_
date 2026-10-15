@@ -405,68 +405,162 @@ function sanitize_svg_markup(string $contents): string
     return $contents;
 }
 
-/**
- * Write already-sanitized SVG markup to uploads/<subdir>/ with a random,
- * collision-safe filename (same naming convention as
- * store_uploaded_image()). Used instead of store_uploaded_image() for
- * SVG uploads, since the sanitized markup — not the raw uploaded bytes —
- * is what must be persisted.
- */
+/** Return a Cloudinary API client configured from the server-side CLOUDINARY_URL. */
+function cloudinary_upload_api(): \Cloudinary\Api\Upload\UploadApi
+{
+    static $api = null;
+    if ($api instanceof \Cloudinary\Api\Upload\UploadApi) {
+        return $api;
+    }
+
+    $cloudinaryUrl = getenv('CLOUDINARY_URL');
+    if (!$cloudinaryUrl) {
+        throw new RuntimeException('Cloudinary is not configured on the server.');
+    }
+
+    $autoload = dirname(__DIR__, 2) . '/vendor/autoload.php';
+    if (!is_file($autoload)) {
+        throw new RuntimeException('Cloudinary dependencies are not installed.');
+    }
+    require_once $autoload;
+
+    \Cloudinary\Configuration\Configuration::instance($cloudinaryUrl);
+    $api = new \Cloudinary\Api\Upload\UploadApi();
+    return $api;
+}
+
+/** Upload a local temporary image to a unique Cloudinary public ID. */
+function upload_cloudinary_image(string $path, string $subdir): string
+{
+    if (!is_file($path) || !preg_match('/^[a-z0-9_-]+$/i', $subdir)) {
+        throw new RuntimeException('Invalid image upload source.');
+    }
+
+    $result = cloudinary_upload_api()->upload($path, [
+        'public_id' => 'starhorse/' . strtolower($subdir) . '/' . bin2hex(random_bytes(16)),
+        'resource_type' => 'image',
+        'overwrite' => false,
+    ]);
+    $url = (string) ($result['secure_url'] ?? '');
+    if (!str_starts_with($url, 'https://res.cloudinary.com/')) {
+        throw new RuntimeException('Cloudinary did not return a secure image URL.');
+    }
+
+    return $url;
+}
+
+/** Resolve Cloudinary URLs directly and legacy local filenames against their previous upload path. */
+function image_asset_url(?string $storedValue, string $legacyBaseUrl): ?string
+{
+    if ($storedValue === null || $storedValue === '') {
+        return null;
+    }
+
+    $parts = parse_url($storedValue);
+    if (($parts['scheme'] ?? '') === 'https'
+        && strtolower((string) ($parts['host'] ?? '')) === 'res.cloudinary.com'
+        && str_contains((string) ($parts['path'] ?? ''), '/image/upload/')) {
+        return $storedValue;
+    }
+
+    return $legacyBaseUrl . rawurlencode($storedValue);
+}
+
+/** Write sanitized SVG markup to a temporary file and upload it to Cloudinary. */
 function store_uploaded_svg(string $sanitizedMarkup, string $subdir): string
 {
-    $filename    = $subdir . '_' . bin2hex(random_bytes(8)) . '_' . time() . '.svg';
-    $uploadDir   = __DIR__ . '/../uploads/' . $subdir . '/';
-    $destination = $uploadDir . $filename;
-
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
+    $temporaryPath = tempnam(sys_get_temp_dir(), 'starhorse-image-');
+    if ($temporaryPath === false) {
+        throw new RuntimeException('Could not prepare the SVG upload.');
     }
+    $svgPath = $temporaryPath . '.svg';
 
-    if (file_put_contents($destination, $sanitizedMarkup) === false) {
-        throw new RuntimeException('Could not save uploaded SVG.');
+    try {
+        if (!rename($temporaryPath, $svgPath) || file_put_contents($svgPath, $sanitizedMarkup) === false) {
+            throw new RuntimeException('Could not prepare the SVG upload.');
+        }
+        return upload_cloudinary_image($svgPath, $subdir);
+    } finally {
+        if (is_file($temporaryPath)) {
+            @unlink($temporaryPath);
+        }
+        if (is_file($svgPath)) {
+            @unlink($svgPath);
+        }
     }
-
-    return $filename;
 }
 
-/**
- * Move a validated upload into uploads/<subdir>/ with a random,
- * collision-safe filename, and return the stored filename (not the full
- * path). Shared by the Vessel and User (profile image) modules.
- */
+/** Upload a validated image and return its Cloudinary secure URL for database storage. */
 function store_uploaded_image(array $file, string $ext, string $subdir): string
 {
-    $filename    = $subdir . '_' . bin2hex(random_bytes(8)) . '_' . time() . '.' . $ext;
-    $uploadDir   = __DIR__ . '/../uploads/' . $subdir . '/';
-    $destination = $uploadDir . $filename;
-
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
-    }
-
-    if (!move_uploaded_file($file['tmp_name'], $destination)) {
-        throw new RuntimeException('Could not save uploaded image.');
-    }
-
-    return $filename;
+    return upload_cloudinary_image($file['tmp_name'], $subdir);
 }
 
-/** Remove an uploaded image file from uploads/<subdir>/ if it exists. */
-function delete_uploaded_image_file(string $filename, string $subdir): void
+/** Delete a Cloudinary image URL or a legacy local image filename. */
+function delete_uploaded_image_file(string $storedValue, string $subdir): void
 {
-    if ($filename === '') {
+    if ($storedValue === '') {
         return;
     }
-    $path = __DIR__ . '/../uploads/' . $subdir . '/' . basename($filename);
+
+    $parts = parse_url($storedValue);
+    if (($parts['scheme'] ?? '') === 'https'
+        && strtolower((string) ($parts['host'] ?? '')) === 'res.cloudinary.com') {
+        $publicId = cloudinary_public_id_from_url($storedValue);
+        if ($publicId === null) {
+            throw new RuntimeException('Cannot identify the Cloudinary image to delete.');
+        }
+        $result = cloudinary_upload_api()->destroy($publicId, [
+            'resource_type' => 'image',
+            'invalidate' => true,
+        ]);
+        if (!in_array($result['result'] ?? '', ['ok', 'not found'], true)) {
+            throw new RuntimeException('Cloudinary could not delete the image.');
+        }
+        return;
+    }
+
+    $path = __DIR__ . '/../uploads/' . $subdir . '/' . basename($storedValue);
     if (is_file($path)) {
         @unlink($path);
     }
 }
 
+/** Extract a public ID only from this configured cloud's original image delivery URLs. */
+function cloudinary_public_id_from_url(string $url): ?string
+{
+    $cloudinaryUrl = getenv('CLOUDINARY_URL') ?: '';
+    $cloudName = parse_url($cloudinaryUrl, PHP_URL_HOST);
+    $parts = parse_url($url);
+    if (($parts['scheme'] ?? '') !== 'https'
+        || strtolower((string) ($parts['host'] ?? '')) !== 'res.cloudinary.com'
+        || !$cloudName) {
+        return null;
+    }
+
+    $segments = explode('/', trim((string) ($parts['path'] ?? ''), '/'));
+    $uploadIndex = array_search('upload', $segments, true);
+    if (($segments[0] ?? '') !== $cloudName || $uploadIndex === false
+        || ($segments[$uploadIndex - 1] ?? '') !== 'image') {
+        return null;
+    }
+
+    $publicIdParts = array_slice($segments, $uploadIndex + 1);
+    if (isset($publicIdParts[0]) && preg_match('/^v[0-9]+$/', $publicIdParts[0])) {
+        array_shift($publicIdParts);
+    }
+    if (!$publicIdParts) {
+        return null;
+    }
+
+    $lastIndex = count($publicIdParts) - 1;
+    $publicIdParts[$lastIndex] = pathinfo(rawurldecode($publicIdParts[$lastIndex]), PATHINFO_FILENAME);
+    return implode('/', array_map('rawurldecode', $publicIdParts)) ?: null;
+}
+
 /**
- * Move a validated upload into uploads/vessels/ (kept for backward
- * compatibility with the existing Vessel module — internally delegates
- * to the generic store_uploaded_image()).
+ * Upload a validated vessel image to Cloudinary (kept for compatibility
+ * with the existing Vessel module — delegates to store_uploaded_image()).
  */
 function store_vessel_image(array $file, string $ext): string
 {
@@ -477,14 +571,14 @@ function store_vessel_image(array $file, string $ext): string
  * Process a validated profile-photo upload into a square "2x2" ID-photo
  * style thumbnail: center-crops to a square (using the shorter side),
  * resizes down to $size x $size, flattens any transparency onto white,
- * and always saves as a JPG for a small, consistent file size. Used by
- * the User Management module so every stored profile image is uniform
- * regardless of what aspect ratio or resolution was uploaded.
+ * and always encodes as a JPG before upload for a small, consistent file
+ * size. Used by User Management so profile images are uniform regardless
+ * of the uploaded aspect ratio or resolution.
  *
  * @param array  $file validated $_FILES entry
  * @param string $ext  'jpg' | 'jpeg' | 'png' | 'webp' (from validate_image_upload())
  * @param int    $size output width/height in pixels (400 = a crisp square thumbnail)
- * @return string stored filename (always .jpg)
+ * @return string Cloudinary HTTPS delivery URL
  */
 function process_and_store_profile_image(array $file, string $ext, int $size = 400): string
 {
@@ -531,22 +625,33 @@ function process_and_store_profile_image(array $file, string $ext, int $size = 4
     imagecopyresampled($square, $source, 0, 0, $cropX, $cropY, $size, $size, $cropSize, $cropSize);
     imagedestroy($source);
 
-    $filename    = 'users_' . bin2hex(random_bytes(8)) . '_' . time() . '.jpg';
-    $uploadDir   = __DIR__ . '/../uploads/users/';
-    $destination = $uploadDir . $filename;
-
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
+    $temporaryPath = tempnam(sys_get_temp_dir(), 'starhorse-profile-');
+    if ($temporaryPath === false) {
+        imagedestroy($square);
+        throw new RuntimeException('Could not prepare the profile photo.');
+    }
+    $jpgPath = $temporaryPath . '.jpg';
+    if (!rename($temporaryPath, $jpgPath)) {
+        @unlink($temporaryPath);
+        imagedestroy($square);
+        throw new RuntimeException('Could not prepare the profile photo.');
     }
 
-    $saved = imagejpeg($square, $destination, 88);
+    $saved = imagejpeg($square, $jpgPath, 88);
     imagedestroy($square);
 
     if (!$saved) {
+        @unlink($jpgPath);
         throw new RuntimeException('Could not save the processed profile photo.');
     }
 
-    return $filename;
+    try {
+        return upload_cloudinary_image($jpgPath, 'users');
+    } finally {
+        if (is_file($jpgPath)) {
+            @unlink($jpgPath);
+        }
+    }
 }
 
 /**
@@ -712,16 +817,20 @@ function validate_resume_upload(array $file, int $maxBytes = 5 * 1024 * 1024, ?a
 }
 
 /**
- * Move a validated non-image upload (e.g. a resume/CV) into
- * uploads/<subdir>/ with a random, collision-safe filename — same
- * mechanics and naming convention as store_uploaded_image() (which
- * despite its name is not image-specific internally), kept as a
- * separate, clearly-named entry point for readability at call sites
- * that are uploading documents rather than images.
+ * Keep validated non-image uploads (e.g. a resume/CV) on local storage;
+ * these are private documents and must not be sent to Cloudinary.
  */
 function store_uploaded_document(array $file, string $ext, string $subdir): string
 {
-    return store_uploaded_image($file, $ext, $subdir);
+    $filename = $subdir . '_' . bin2hex(random_bytes(8)) . '_' . time() . '.' . $ext;
+    $uploadDir = __DIR__ . '/../uploads/' . $subdir . '/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+    if (!move_uploaded_file($file['tmp_name'], $uploadDir . $filename)) {
+        throw new RuntimeException('Could not save uploaded document.');
+    }
+    return $filename;
 }
 
 /**
