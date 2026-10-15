@@ -2886,6 +2886,7 @@ header.masthead h1 {
   position: relative;
   margin-bottom: 1.25rem;
   padding-bottom: 0.75rem;
+  margin-top: 1rem;
   font-family: var(--sh-font-heading);
   font-size: 0.95rem;
   font-weight: 700;
