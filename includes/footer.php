@@ -65,6 +65,20 @@
                     </ul>
                 </div>
 
+                <!-- EXPLORE OUR SERVICES -->
+                <div class="col-lg-3 col-md-6 sh-footer-col">
+                    <h3 class="sh-footer-heading">Explore Our Services</h3>
+                    <ul class="sh-footer-links">
+                        <li><a href="#vessels">Our Fleet</a></li>
+                        <li><a href="#routes">Routes &amp; Destinations</a></li>
+                        <li><a href="#rates">Fares &amp; Rates</a></li>
+                    </ul>
+                    <a class="sh-footer-book-btn" href="https://ferryeasy.ph/" target="_blank"
+                        rel="noopener noreferrer">
+                        <i class="bi bi-calendar-check-fill me-2" aria-hidden="true"></i>Book Your Voyage
+                    </a>
+                </div>
+
                 <!-- CONTACT -->
                 <div class="col-lg-3 col-md-6 sh-footer-col">
                     <h3 class="sh-footer-heading">Contact Us</h3>
@@ -82,20 +96,6 @@
                             <a href="mailto:shipping@starhorse.com">shipping@starhorse.com</a>
                         </li>
                     </ul>
-                </div>
-
-                <!-- EXPLORE OUR SERVICES -->
-                <div class="col-lg-3 col-md-6 sh-footer-col">
-                    <h3 class="sh-footer-heading">Explore Our Services</h3>
-                    <ul class="sh-footer-links">
-                        <li><a href="#vessels">Our Fleet</a></li>
-                        <li><a href="#routes">Routes &amp; Destinations</a></li>
-                        <li><a href="#rates">Fares &amp; Rates</a></li>
-                    </ul>
-                    <a class="sh-footer-book-btn" href="https://ferryeasy.ph/" target="_blank"
-                        rel="noopener noreferrer">
-                        <i class="bi bi-calendar-check-fill me-2" aria-hidden="true"></i>Book Your Voyage
-                    </a>
                 </div>
 
             </div>
