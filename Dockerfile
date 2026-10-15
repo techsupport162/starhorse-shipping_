@@ -3,7 +3,7 @@ FROM php:8.2-apache
 # Enable mod_rewrite + headers (for .htaccess) and PDO PostgreSQL
 RUN a2enmod rewrite headers && \
     apt-get update -qq && \
-    apt-get install -y --no-install-recommends libpq-dev && \
+    apt-get install -y --no-install-recommends libpq-dev unzip && \
     docker-php-ext-install pdo pdo_pgsql && \
     rm -rf /var/lib/apt/lists/*
 
