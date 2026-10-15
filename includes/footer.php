@@ -5,18 +5,19 @@
 <!-- Decorative wave + vessel on the boundary between #contact and the footer -->
 <div class="sh-footer-wave-stage" id="footerWaveStage" aria-hidden="true">
 
-    <svg class="sh-footer-wave" viewBox="0 0 1440 160" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
-        <path
-            d="M0,100 C220,55 380,120 600,90 C820,60 960,115 1180,85 C1300,68 1380,80 1440,90 L1440,160 L0,160 Z" />
+    <svg class="sh-footer-wave" viewBox="0 0 1440 160" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"
+        focusable="false">
+        <path d="M0,100 C220,55 380,120 600,90 C820,60 960,115 1180,85 C1300,68 1380,80 1440,90 L1440,160 L0,160 Z" />
     </svg>
 
     <div class="sh-footer-vessel-wrap" id="footerVesselWrap">
         <div class="sh-footer-vessel-float">
-            <svg class="sh-footer-vessel-wake" viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <svg class="sh-footer-vessel-wake" viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg"
+                focusable="false">
                 <path d="M4,40 C24,34 44,44 64,38" stroke="#eaf4f7" stroke-width="4" fill="none"
                     stroke-linecap="round" />
-                <path d="M-2,50 C20,44 40,52 58,47" stroke="#eaf4f7" stroke-width="3" fill="none"
-                    stroke-linecap="round" opacity="0.6" />
+                <path d="M-2,50 C20,44 40,52 58,47" stroke="#eaf4f7" stroke-width="3" fill="none" stroke-linecap="round"
+                    opacity="0.6" />
             </svg>
             <img class="sh-footer-vessel" src="assets/img/vessel-footer.png" width="512" height="334" loading="lazy"
                 decoding="async" alt="" />
@@ -73,14 +74,14 @@
                         <li><a href="#routes">Routes &amp; Destinations</a></li>
                         <li><a href="#rates">Fares &amp; Rates</a></li>
                     </ul>
-                    <a class="sh-footer-book-btn" href="https://ferryeasy.ph/" target="_blank"
-                        rel="noopener noreferrer">
-                        <i class="bi bi-calendar-check-fill me-2" aria-hidden="true"></i>Book Your Voyage
-                    </a>
                 </div>
 
                 <!-- CONTACT -->
                 <div class="col-lg-3 col-md-6 sh-footer-col">
+                    <a class="sh-footer-book-btn" href="https://ferryeasy.ph/" target="_blank"
+                        rel="noopener noreferrer">
+                        <i class="bi bi-calendar-check-fill me-2" aria-hidden="true"></i>Book Your Voyage
+                    </a>
                     <h3 class="sh-footer-heading">Contact Us</h3>
                     <ul class="sh-footer-contact-list">
                         <li>
