@@ -150,7 +150,7 @@ $directionsUrl = $hasOffice
                 </div>
                 <?php else: ?>
                 <!-- Wrap the ports grid in a scrollable region to limit vertical height -->
-                <div class="sh-port-scroll" role="region" aria-label="Ports list" tabindex="0" style="max-height:320px; overflow-y:auto; padding-right:8px;">
+                <div class="sh-port-scroll" role="region" aria-label="Ports list" tabindex="0" style="max-height: min(320px, 50vh); overflow-y:auto; -webkit-overflow-scrolling:touch; padding-right:8px;">
                     <div class="sh-port-grid">
                         <?php foreach ($ports as $port): ?>
                         <a class="sh-port-card"
