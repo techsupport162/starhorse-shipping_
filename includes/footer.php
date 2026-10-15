@@ -19,7 +19,7 @@
                 <path d="M-2,50 C20,44 40,52 58,47" stroke="#eaf4f7" stroke-width="3" fill="none" stroke-linecap="round"
                     opacity="0.6" />
             </svg>
-            <img class="sh-footer-vessel" src="assets/img/vessel.png" width="512" height="334" loading="lazy"
+            <img class="sh-footer-vessel" src="assets/img/vessel.png" width="612" height="434" loading="lazy"
                 decoding="async" alt="" />
         </div>
     </div>
