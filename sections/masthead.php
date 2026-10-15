@@ -32,11 +32,12 @@ if (!empty(getenv('CLOUDINARY_VIDEO_URL'))) {
                     Setting the Standards of Excellence and Good Service.
                 </h1>
                 <hr class="divider" />
-                <a class="masthead-book-link d-xl-none" href="https://ferryeasy.ph/" target="_blank"
-                    rel="noopener noreferrer">
-                    <i class="bi bi-calendar-check-fill" aria-hidden="true"></i>
-                    Book Now
-                    <span class="visually-hidden">(opens in a new tab)</span>
+                <a class="nav-link book-now-link masthead-book-link d-xl-none" href="https://ferryeasy.ph/"
+                    target="_blank" rel="noopener noreferrer">
+                    <span class="book-now-btn">
+                        <i class="bi bi-calendar-check-fill me-2" aria-hidden="true"></i>Book Now
+                        <span class="visually-hidden">(opens in a new tab)</span>
+                    </span>
                 </a>
             </div>
         </div>
