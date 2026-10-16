@@ -143,22 +143,17 @@ if (!empty(getenv('CLOUDINARY_EMBED_URL'))) {
                     </div>
                     <div class="col-lg-6">
                         <div class="about-video-wrap">
-                            <iframe
-                                src="<?= htmlspecialchars($about_embed_url, ENT_QUOTES, 'UTF-8') ?>"
-                                width="640"
-                                height="360" 
-                                style="height: auto; width: 100%; aspect-ratio: 640 / 360; border: 0;"
-                                allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-                                allowfullscreen
-                                frameborder="0"
-                                title="Starhorse Fleet Video">
+                            <iframe src="<?= htmlspecialchars($about_embed_url, ENT_QUOTES, 'UTF-8') ?>" width="640"
+                                height="360" style="height: auto; width: 100%; aspect-ratio: 640 / 360; border: 0;"
+                                allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen
+                                frameborder="0" title="Starhorse Fleet Video">
                             </iframe>
                         </div>
-                        <p class="about-video-caption">
+                        <!-- <p class="about-video-caption">
                             Suggested clip: a short (60–90 sec) walkthrough of a vessel
                             boarding/departure at Lucena City port — deck loading, RORO
                             ramp, passengers boarding, and the ship pulling out to sea.
-                        </p>
+                        </p> -->
                     </div>
                 </div>
             </div>
@@ -175,12 +170,12 @@ if (!empty(getenv('CLOUDINARY_EMBED_URL'))) {
                         <div class="about-routes-card">
                             <h4><i class="fas fa-map-pin" aria-hidden="true"></i>Lucena City</h4>
                             <ul>
-                                <li>Lucena City &ndash; Masbate City and vice versa</li>                                
+                                <li>Lucena City &ndash; Masbate City and vice versa</li>
                                 <li>Lucena City &ndash; Balanacan, Mogpog and vice versa</li>
                                 <li>Lucena City &ndash; Banton / Simara and vice versa</li>
                                 <li>Lucena City &ndash; San Agustin and vice versa</li>
                                 <li>Lucena City &ndash; Romblon and vice versa</li>
-                                <li>Lucena City &ndash; Sibuyan and vice versa</li>                                
+                                <li>Lucena City &ndash; Sibuyan and vice versa</li>
                             </ul>
                         </div>
                     </div>
